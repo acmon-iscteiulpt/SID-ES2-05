@@ -62,7 +62,7 @@ public abstract class Cliente implements MqttCallback{
 		}
 	}
 	
-	public void sendValues(int valor1, int valor2) {
+	public void sendValues(String json) {
 		
 	}
 	

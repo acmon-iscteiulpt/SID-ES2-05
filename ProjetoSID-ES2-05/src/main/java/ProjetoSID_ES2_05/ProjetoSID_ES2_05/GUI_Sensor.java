@@ -16,9 +16,8 @@ import javax.swing.JLabel;
 public class GUI_Sensor {
 
 	private JFrame frame;
-	private JTextField textField_temperatura;
-	private JTextField textField_luminosidade;
 	private Sensor sensor;
+	private JTextField textField;
 
 	/**
 	 * Create the application.
@@ -47,26 +46,14 @@ public class GUI_Sensor {
 //		});
 		
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		frame.getContentPane().add(splitPane);
 		
-		JLabel lblTemperatura = new JLabel("Temperatura");
-		splitPane.setLeftComponent(lblTemperatura);
+		JLabel lblJSON = new JLabel("JSON");
+		splitPane.setLeftComponent(lblJSON);
 		
-		JLabel lblLuminosidade = new JLabel("Luminosidade");
-		splitPane.setRightComponent(lblLuminosidade);
-		
-		JSplitPane splitPane_1 = new JSplitPane();
-		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		frame.getContentPane().add(splitPane_1);
-		
-		textField_temperatura = new JTextField();
-		splitPane_1.setLeftComponent(textField_temperatura);
-		textField_temperatura.setColumns(10);
-		
-		textField_luminosidade = new JTextField();
-		splitPane_1.setRightComponent(textField_luminosidade);
-		textField_luminosidade.setColumns(10);
+		textField = new JTextField();
+		splitPane.setRightComponent(textField);
+		textField.setColumns(10);
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel);
@@ -76,26 +63,17 @@ public class GUI_Sensor {
 			
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				String luminosidade = textField_luminosidade.getText();
-				String temperatura = textField_temperatura.getText();
-				int valorLuminosidade = 0;
-				int valorTemperatura = 0;
+				String json = textField.getText();
 				try {
-					valorLuminosidade = Integer.parseInt(luminosidade);
-					valorTemperatura = Integer.parseInt(temperatura);
-					
-					System.out.println("Valor Luminosidade: " +  valorLuminosidade);
-					System.out.println("Valor Temperatura: " + valorTemperatura);
-					
+					System.out.println("Mensagem JSON: " +  json);
 					//Enviar os dados
-					sensor.sendValues(valorTemperatura, valorLuminosidade);
+					sensor.sendValues(json);
 				} catch (Exception e) {
 					// TODO: handle exception
 					System.out.println("Os valores têm que ser númericos");
 					e.printStackTrace();
 				} finally {
-					textField_luminosidade.setText("");
-					textField_temperatura.setText("");
+					textField.setText("");
 				}
 				
 				

@@ -25,19 +25,14 @@ public class Sensor extends Cliente {
 	 * porque fui preguiçoso
 	 */
 	@Override
-	public void sendValues(int valorTemperatura, int valorLuminosidade) {
+	public void sendValues(String json) {
 		if(!super.getClient().isConnected())
 			super.connectToServer();
 		String topic = "iscte_sid_grupo_05";
-		String content1 = "Valor Temperatura: " + valorTemperatura;
-		String content2 = "Valor Luminosidade: " + valorLuminosidade;
-		MqttMessage message1 = new MqttMessage(content1.getBytes());
-		MqttMessage message2 = new MqttMessage(content2.getBytes());
+		MqttMessage message1 = new MqttMessage(json.getBytes());
 		message1.setQos(super.qos);
-		message2.setQos(super.qos);
 		try {
 			super.getClient().publish(topic, message1);
-			super.getClient().publish(topic, message2);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("Erro ao enviar dados pelo sensor");
