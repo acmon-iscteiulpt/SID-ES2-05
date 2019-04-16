@@ -38,6 +38,9 @@ public abstract class Cliente implements MqttCallback{
 		}
 	}   
 	
+	
+	
+	
 	protected void connectToServer() {
 		try {
 			System.out.println("Connecting to broker: " + broker);
