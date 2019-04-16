@@ -36,7 +36,7 @@ public abstract class Cliente implements MqttCallback{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-	}
+	}   
 	
 	protected void connectToServer() {
 		try {
