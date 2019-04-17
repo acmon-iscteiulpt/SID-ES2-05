@@ -24,7 +24,7 @@ public class GUI_Sensor {
 	 */
 	public GUI_Sensor() {
 		initialize();
-		new Mongo("1");
+//		new Mongo("1");
 		this.sensor = new Sensor("2");
 	}
 
@@ -37,13 +37,13 @@ public class GUI_Sensor {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-//		frame.addWindowListener(new WindowAdapter() {
-//			
-//			public void windowClosing(WindowEvent we) {
-//				sensor.disconnectServer();
-//			}
-//			
-//		});
+		frame.addWindowListener(new WindowAdapter() {
+			
+			public void windowClosing(WindowEvent we) {
+				sensor.disconnectServer();
+			}
+			
+		});
 		
 		JSplitPane splitPane = new JSplitPane();
 		frame.getContentPane().add(splitPane);

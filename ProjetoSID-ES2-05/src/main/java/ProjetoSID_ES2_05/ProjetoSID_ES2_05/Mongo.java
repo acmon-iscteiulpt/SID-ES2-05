@@ -87,5 +87,10 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 		return nova_luminosidade;
 		
 	}
+	
+	
+	public static void main(String[] args) {
+		new Mongo("1");
+	}
 
 }

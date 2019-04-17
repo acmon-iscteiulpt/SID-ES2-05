@@ -9,7 +9,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public abstract class Cliente implements MqttCallback{
 	
-//	private static final String clientID = "1";
 	private static final String broker = "tcp://iot.eclipse.org:1883";
 	protected static final int qos = 2;
 	
@@ -73,6 +72,7 @@ public abstract class Cliente implements MqttCallback{
 	public void connectionLost(Throwable cause) {
 		// TODO Auto-generated method stub
 		System.out.println("Connection Lost!");
+		System.out.println(cause.toString());
 	}
 
 	public void messageArrived(String topic, MqttMessage message) throws Exception {

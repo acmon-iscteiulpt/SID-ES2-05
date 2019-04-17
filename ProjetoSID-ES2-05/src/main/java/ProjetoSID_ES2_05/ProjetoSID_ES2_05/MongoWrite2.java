@@ -18,17 +18,18 @@ public class MongoWrite2 {
 		table = db.getCollection(collection);	
 	}
 	
+	
 	public void write(String nomeSensor, double valor, String data, String hora) {
-		
-
-		
 		BasicDBObject doc = new BasicDBObject("nomeSensor", nomeSensor).
                 append("valor", valor).
                 append("info", new BasicDBObject("data", data).append("hora", hora));
 		try { 
 			table.insert(doc);
 		} 
-		catch (Exception e) {}
+		catch (Exception e) {
+			System.out.println("Catch método write");
+			e.printStackTrace();
+		}
 	}
 	
 	public void close() {
