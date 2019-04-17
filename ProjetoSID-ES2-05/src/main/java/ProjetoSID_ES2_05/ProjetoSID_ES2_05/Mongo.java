@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONObject;
 
 
 
@@ -17,7 +18,7 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 		super(clientID);
 		subscribe();
 	}
-	
+
 	@Override
 	public void subscribe() {
 		try {
@@ -28,67 +29,66 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("Mongo recebeu uma mensagem:");
-		System.out.println(message.toString());
-		
-		System.out.println("Dados a guardar na BD em JSON(string):     " + converteDadosSensorEmStringJSON_luminosidade(message.toString()));
-        
-       
-        
-        if(converteDadosSensorEmStringJSON_luminosidade(message.toString()) != null){
-        	 System.out.println("Inserindo na bd");
-        	
-        	ObjectMapper mapper = new ObjectMapper();
+		System.out.println("Mongo recebeu uma mensagem:  " + message.toString());
 
-        	//JSON from String to Object
-        	MainParser mp = mapper.readValue(message.toString(), MainParser.class);
+		JSONObject jsonObj = new JSONObject(message.toString());
 
-        	MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
+		if(jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
 
-        	mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
+			System.out.println("tem |tmp|  , |cell|  , |tim|   ,   |dat|");
+			System.out.println("Inserindo na bd");
 
-        	mw2.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
-        }
-		
-		
-	}
-	
-	
-	public static String converteDadosSensorEmStringJSON_luminosidade(String dadosSensor) {
-		
-		String nova_luminosidade = null;
-		
-		ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = new ObjectMapper();
 
-		//JSON from String to Object
-		MainParser mp;
-		try {
-			mp = mapper.readValue(dadosSensor, MainParser.class);
-			nova_luminosidade = "{\"nomeSensor\":" + "\"luminosidade\"," + "\"valor\":" + mp.getCell() + "," + "\"info\":" + "{\"data\":" + "\"" + mp.getDat() + "\"," +  "\"hora\":" + "\"" + mp.getTim() + "\"" + "}" + "}";
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			nova_luminosidade = null;
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			nova_luminosidade = null;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			nova_luminosidade = null;
+			//JSON from String to Object
+			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
+
+			MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
+
+			mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
+
+			mw2.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
+		}
+		if(jsonObj.has("tmp") && !jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
+			System.out.println("tem tudo menos a cell(luminosidade)");
+			System.out.println("Inserindo dados apenas da temperatura na bd");
+
+			ObjectMapper mapper = new ObjectMapper();
+
+			//JSON from String to Object
+			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
+
+			MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
+
+			mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
+
+		}
+		if(!jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
+			System.out.println("tem tudo menos a tmp(temperatura)");
+			System.out.println("Inserindo dados apenas da temperatura na bd");
+
+			ObjectMapper mapper = new ObjectMapper();
+
+			//JSON from String to Object
+			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
+
+			MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
+
+			mw2.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
+
+
 		}
 
-	
-		return nova_luminosidade;
-		
+
+
+
 	}
-	
-	
+
+
 	public static void main(String[] args) {
 		new Mongo("1");
 	}
