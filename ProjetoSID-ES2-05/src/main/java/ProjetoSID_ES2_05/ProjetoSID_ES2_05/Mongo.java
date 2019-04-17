@@ -35,8 +35,10 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 		// TODO Auto-generated method stub
 		System.out.println("Mongo recebeu uma mensagem:  " + message.toString());
 
-		JSONObject jsonObj = new JSONObject(message.toString());
+		JSONObject jsonObj = new JSONObject(message.toString());                                          //tornar a mensagem recebida num json object para em baixo verificar quais campos exeitem nesse json
 
+		MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");                      //ligação à BD
+		
 		if(jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
 
 			System.out.println("tem |tmp|  , |cell|  , |tim|   ,   |dat|");
@@ -47,7 +49,7 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 			//JSON from String to Object
 			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
-			MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
+
 
 			mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
 
@@ -62,8 +64,6 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 			//JSON from String to Object
 			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
-			MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
-
 			mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
 
 		}
@@ -76,15 +76,10 @@ public class Mongo extends Cliente{  //mudar a puta do nome
 			//JSON from String to Object
 			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
-			MongoWrite2 mw2 = new MongoWrite2("Dados_sensoresBD", "dados_luminosidade");
-
 			mw2.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
 
 
 		}
-
-
-
 
 	}
 
