@@ -34,7 +34,7 @@ public class Subscriber extends Cliente {
 		// campos exeitem nesse json
 		JSONObject jsonObj = new JSONObject(message.toString());
 		// ligação à BD
-		MongoWrite2 mw2 = new MongoWrite2(bd, collection);
+		MongoWrite mw2 = new MongoWrite(bd, collection);
 
 		if (jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
 			System.out.println("tem |tmp|  , |cell|  , |tim|   ,   |dat|");

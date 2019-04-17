@@ -5,14 +5,14 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
-public class MongoWrite2 {
+public class MongoWrite {
 
 	private MongoClient mongoClient1;
 	private DB db;
 	DBCollection table;
 	
 	
-	public MongoWrite2(String bd, String collection) {
+	public MongoWrite(String bd, String collection) {
 		MongoClient mongoClient1 = new MongoClient();
 		db = mongoClient1.getDB(bd);
 		table = db.getCollection(collection);	
