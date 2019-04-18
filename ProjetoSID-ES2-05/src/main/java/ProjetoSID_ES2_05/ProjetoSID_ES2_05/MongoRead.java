@@ -22,12 +22,12 @@ public class MongoRead  {
 
 	private static final String bd = "Dados_sensoresBD";
 	private static final String collection = "dados_luminosidade";
-	
+
 	private Connection conn;
 	private MongoClient mongoClient;
 	private DB db;
 	DBCollection table;
-	
+
 	public MongoRead(String bd, String collection) {
 		this.mongoClient = new MongoClient();
 		db = mongoClient.getDB(bd);
@@ -35,8 +35,8 @@ public class MongoRead  {
 		connectToMainBase();
 		Timer();
 	}
-	
-	
+
+
 	public void connectToMainBase() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -48,7 +48,7 @@ public class MongoRead  {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void disconnectFromMainBase() {
 		try {
 			conn.close();
@@ -59,7 +59,7 @@ public class MongoRead  {
 			e.printStackTrace();
 		}
 	}
-	
+
 	//Tenho que ir buscar o ID maximo
 	// 2019-04-10 13:24:17 -->TimeStamp
 	public void introduzirInformacao(String data, String hora, String valorMedicao, String tipoSensor) {
@@ -92,49 +92,55 @@ public class MongoRead  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	//Vai ter que ler o mongo db e enviar para a base de dados principal de 1 em 1 minuto
 	public void Timer() {
 		Timer timer = new Timer();
-		final long segundos = (1000 * 60);
+		final long segundos = (1000 * 20); //20 em 20segundos
 		TimerTask tarefa = new TimerTask() {
 
 			@Override
 			public void run() {
-				
+
 				//lê o mongodb com os valores que ainda nao foram exportados --> guardar lista??
 				DBCursor cursor = table.find();
 				System.out.println("Vou migrar os dados: " + new Date());
 				while(cursor.hasNext()) {
+					
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-					BasicDBObject info = (BasicDBObject) obj.get("info");
-					String data = info.getString("data");
-					String hora = info.getString("hora");
-					String valorMedicao = obj.getString("valor");
-					System.out.println(obj.toJson().toString());
-					if(obj.getString("nomeSensor").equals("temperatura")) {
-						introduzirInformacao(data, hora, valorMedicao, "temperatura");
-					} else if (obj.getString("nomeSensor").equals("luminosidade")) {
-						introduzirInformacao(data, hora, valorMedicao, "luminosidade");
+					
+					if(obj.get("exportado").toString().equals("false")){
+						
+						
+						BasicDBObject info = (BasicDBObject) obj.get("info");
+						String data = info.getString("data");
+						String hora = info.getString("hora");
+						String valorMedicao = obj.getString("valor");
+						System.out.println(obj.toJson().toString());
+						if(obj.getString("nomeSensor").equals("temperatura")) {
+							introduzirInformacao(data, hora, valorMedicao, "temperatura");
+						} else if (obj.getString("nomeSensor").equals("luminosidade")) {
+							introduzirInformacao(data, hora, valorMedicao, "luminosidade");
+						}
+
+
+						// passagem do campo exportado de false para true
+						BasicDBObject newDocument = new BasicDBObject();
+						newDocument.append("$set", new BasicDBObject().append("exportado", true));							
+						BasicDBObject searchQuery = new BasicDBObject().append("exportado", false);
+						table.update(searchQuery, newDocument);
 					}
-					
-					
-					// passagem do campo exportado de false para true
-					BasicDBObject newDocument = new BasicDBObject();
-					newDocument.append("$set", new BasicDBObject().append("exportado", true));							
-					BasicDBObject searchQuery = new BasicDBObject().append("exportado", false);
-					table.update(searchQuery, newDocument);
 				}
 			}
-			
+
 		};
 		timer.scheduleAtFixedRate(tarefa, segundos, segundos);
 	}
-	
+
 
 
 
