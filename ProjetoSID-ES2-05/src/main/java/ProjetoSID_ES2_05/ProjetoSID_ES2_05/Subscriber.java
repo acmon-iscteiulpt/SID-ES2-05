@@ -1,5 +1,8 @@
 package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -39,38 +42,46 @@ public class Subscriber extends Cliente {
 		// tornar a mensagem recebida num json object para em baixo verificar quais
 		// campos exeitem nesse json
 		JSONObject jsonObj = new JSONObject(message.toString());
+		
+		ObjectMapper mapper = new ObjectMapper();
 
-		if (jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
+		// JSON from String to Object
+		MainParser mp = mapper.readValue(message.toString(), MainParser.class);
+		
+		
+		
+		
+		Date data_hora = new Date();                                                 // ir buscar data e hora atual, ou seja, do momento da mediçao do sensor
+		SimpleDateFormat formato_data = new SimpleDateFormat("dd/MM/Y");
+		SimpleDateFormat formato_hora = new SimpleDateFormat("hh:mm:ss");
+				
+		mp.setDat(formato_data.format(data_hora).toString());
+		mp.setTim(formato_hora.format(data_hora).toString());
+
+		
+		
+		
+		if (jsonObj.has("tmp") && jsonObj.has("cell")) {
 			System.out.println("tem |tmp|  , |cell|  , |tim|   ,   |dat|");
 			System.out.println("Inserindo na bd");
 
-			ObjectMapper mapper = new ObjectMapper();
-
-			// JSON from String to Object
-			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
+			
 			mw.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
 			mw.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
 		}
-		if (jsonObj.has("tmp") && !jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
+		if (jsonObj.has("tmp") && !jsonObj.has("cell")) {
 			System.out.println("tem tudo menos a cell(luminosidade)");
 			System.out.println("Inserindo dados apenas da temperatura na bd");
 
-			ObjectMapper mapper = new ObjectMapper();
 
-			// JSON from String to Object
-			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
 			mw.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
 
 		}
-		if (!jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
+		if (!jsonObj.has("tmp") && jsonObj.has("cell")) {
 			System.out.println("tem tudo menos a tmp(temperatura)");
 			System.out.println("Inserindo dados apenas da temperatura na bd");
 
-			ObjectMapper mapper = new ObjectMapper();
-
-			// JSON from String to Object
-			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
 			mw.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
 
