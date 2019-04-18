@@ -10,8 +10,8 @@ import org.json.JSONObject;
 
 public class Subscriber extends Cliente {
 
-	private static final String bd = "sid_db";
-	private static final String collection = "dados";
+	private static final String bd = "Dados_sensoresBD";
+	private static final String collection = "dados_luminosidade";
 	
 	private MongoWrite mw;
 	private MongoRead mr;

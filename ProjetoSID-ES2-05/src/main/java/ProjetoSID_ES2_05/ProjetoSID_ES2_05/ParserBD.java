@@ -1,10 +1,13 @@
 package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
 
+import org.json.JSONObject;
+
 public class ParserBD {
 	private String nomeSensor;
 	private double valor;
 	private Info info;
 	private boolean exportado;
+	
 	
 	
 	public String getNomeSensor() {

@@ -20,8 +20,8 @@ import org.json.JSONObject;
 
 public class MongoRead  {
 
-	private static final String bd = "sid_db";
-	private static final String collection = "dados";
+	private static final String bd = "Dados_sensoresBD";
+	private static final String collection = "dados_luminosidade";
 	
 	private Connection conn;
 	private MongoClient mongoClient;
@@ -41,7 +41,7 @@ public class MongoRead  {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			this.conn = null;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/bd_origem", "root", "teste123");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/nossabd_origem", "root", "teste123");
 			System.out.println("Database is connected !");
 		} catch (Exception e) {
 			System.out.println("Connection failed!");
@@ -111,6 +111,7 @@ public class MongoRead  {
 				System.out.println("Vou migrar os dados: " + new Date());
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
+					
 					BasicDBObject info = (BasicDBObject) obj.get("info");
 					String data = info.getString("data");
 					String hora = info.getString("hora");

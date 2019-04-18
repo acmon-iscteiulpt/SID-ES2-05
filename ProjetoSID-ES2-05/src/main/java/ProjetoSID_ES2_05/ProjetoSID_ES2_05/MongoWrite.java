@@ -22,7 +22,7 @@ public class MongoWrite {
 	public void write(String nomeSensor, double valor, String data, String hora) {
 		BasicDBObject doc = new BasicDBObject("nomeSensor", nomeSensor).
                 append("valor", valor).
-                append("info", new BasicDBObject("data", data).append("hora", hora));
+                append("info", new BasicDBObject("data", data).append("hora", hora)).append("exportado", false);
 		try { 
 			table.insert(doc);
 		} 
