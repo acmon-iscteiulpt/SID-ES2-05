@@ -16,14 +16,7 @@ public class Sensor extends Cliente {
 		System.out.println("Sensor enviou mensagem!");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ProjetoESII.ProjetoESII.Cliente#sendValues(int, int)
-	 * 
-	 * Aspetos a melhorar: Enviar os valores apenas numa mensagem, não implementei
-	 * porque fui preguiçoso
-	 */
+
 	@Override
 	public void sendValues(String json) {
 		if(!super.getClient().isConnected())

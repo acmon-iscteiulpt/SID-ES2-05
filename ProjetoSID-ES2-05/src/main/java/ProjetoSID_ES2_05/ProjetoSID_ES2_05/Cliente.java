@@ -73,6 +73,10 @@ public abstract class Cliente implements MqttCallback{
 		// TODO Auto-generated method stub
 		System.out.println("Connection Lost!");
 		System.out.println(cause.toString());
+		connectToServer();
+		if(client.isConnected()) {
+			System.out.println("Cliente está novamente connectado!");
+		}
 	}
 
 	public void messageArrived(String topic, MqttMessage message) throws Exception {

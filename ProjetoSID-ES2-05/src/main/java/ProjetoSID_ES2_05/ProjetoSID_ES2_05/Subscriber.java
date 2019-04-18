@@ -10,8 +10,8 @@ import org.json.JSONObject;
 
 public class Subscriber extends Cliente {
 
-	private static final String bd = "Dados_sensoresBD";
-	private static final String collection = "dados_luminosidade";
+	private static final String bd = "sid_db";
+	private static final String collection = "dados";
 	
 	private MongoWrite mw;
 	private MongoRead mr;
@@ -21,7 +21,6 @@ public class Subscriber extends Cliente {
 		subscribe();
 		this.mw = new MongoWrite(bd, collection);
 		this.mr = new MongoRead(bd, collection);
-		mr.Timer();
 	}
 
 	@Override

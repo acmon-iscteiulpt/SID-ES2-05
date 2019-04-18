@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.json.JSONObject;
@@ -30,15 +32,8 @@ public class MongoRead  {
 		this.mongoClient = new MongoClient();
 		db = mongoClient.getDB(bd);
 		table = db.getCollection(collection);
-	}
-
-
-	public void mostraMongoDB() {
-		DBCursor cursor = table.find();
-		while(cursor.hasNext()) {
-
-			System.out.println(cursor.next());
-		}
+		connectToMainBase();
+		Timer();
 	}
 	
 	
@@ -67,20 +62,25 @@ public class MongoRead  {
 	
 	//Tenho que ir buscar o ID maximo
 	// 2019-04-10 13:24:17 -->TimeStamp
-	public void introduzirInformacao(String dataHoraMedicao, String valorMedicao, String tipoSensor) {
+	public void introduzirInformacao(String data, String hora, String valorMedicao, String tipoSensor) {
 		try {
 			Statement stmt = conn.createStatement();
-			String dataHoraMedicao2 = "\'22:11:05\'";
-			String valorMedicaoTemperatura = "10";
-			int idMedicao = 1;
-			String query = "INSERT INTO medicoestemperatura (DataHoraMedicao, ValorMedicaoTemperatura, IDMedicao) " + "VALUES(" + dataHoraMedicao2 + ", " 
-								+ valorMedicaoTemperatura + ", " + idMedicao +");";
+			SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = format1.parse(data);
+			String dataOficial = format2.format(date);
+			String dataHoraMedicao = "\'" + dataOficial + " " + hora + "\'";
+			String querySelectId = "SELECT COALESCE(MAX(IDMedicao)+1,1) FROM medicoes" + tipoSensor + ";";
+			ResultSet rs = stmt.executeQuery(querySelectId);
+			rs.next();
+			int idMedicao = rs.getInt("COALESCE(MAX(IDMedicao)+1,1)");
+			String query = null;
 			if(tipoSensor.equals("temperatura")) {
-				query = "INSERT INTO medicoestemperatura (DataHoraMedicao, ValorMedicaoTemperatura, IDMedicao) " + "VALUES(" + dataHoraMedicao2 + ", " 
-						+ valorMedicaoTemperatura + ", " + idMedicao +");";
+				query =  "INSERT INTO medicoestemperatura (IDMedicao, DataHoraMedicao, ValorMedicaoTemperatura) " + "VALUES(" + idMedicao + ", " 
+						+ dataHoraMedicao + ", " + valorMedicao +");";
 			} else if(tipoSensor.equals("luminosidade")) {
-				query = "INSERT INTO medicoesluminosidade (DataHoraMedicao, ValorMedicaoLuminosidade, IDMedicao) " + "VALUES(" + dataHoraMedicao2 + ", " 
-						+ valorMedicaoTemperatura + ", " + idMedicao +");";
+				query = "INSERT INTO medicoesluminosidade (IDMedicao, DataHoraMedicao, ValorMedicaoLuminosidade) " + "VALUES(" + idMedicao + ", " 
+						+ dataHoraMedicao + ", " + valorMedicao +");";
 			}
 			stmt.execute(query);
 			System.out.println("Introdução na base de dados feita com sucesso");
@@ -88,63 +88,38 @@ public class MongoRead  {
 			// TODO Auto-generated catch block
 			System.out.println("Introduzir informação na base de dados principal falhou !");
 			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	public void lerMainBase() {
-		try {
-			Statement stmt = conn.createStatement();
-			String query = "SELECT * FROM Cultura";
-			ResultSet rs = stmt.executeQuery(query);
-			while(rs.next()) {
-				String nomeCultura = rs.getString("NomeCultura");
-				String descricao = rs.getString("DescricaoCultura");
-				int id = rs.getInt("Utilizador_IDUtilizador");
-				System.out.println(nomeCultura + " // " + descricao + " // --> ID: " + id);
-			}
-		} catch (SQLException e) {
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
 	
+	
+	
 	//Vai ter que ler o mongo db e enviar para a base de dados principal de 1 em 1 minuto
 	public void Timer() {
 		Timer timer = new Timer();
-		final long segundos = (1000 * 30);
+		final long segundos = (1000 * 60);
 		TimerTask tarefa = new TimerTask() {
 
 			@Override
 			public void run() {
-				System.out.println("Vou migrar os dados: " + new Date());
+				
 				//lê o mongodb com os valores que ainda nao foram exportados --> guardar lista??
 				DBCursor cursor = table.find();
+				System.out.println("Vou migrar os dados: " + new Date());
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-					String data;
-					String hora;
-					String dataHoraMedicao;
-					String valorMedicao;
+					BasicDBObject info = (BasicDBObject) obj.get("info");
+					String data = info.getString("data");
+					String hora = info.getString("hora");
+					String valorMedicao = obj.getString("valor");
 					System.out.println(obj.toJson().toString());
 					if(obj.containsValue("temperatura")) {
-						System.out.println("Sensor Temperatura");
-						data = obj.getString("info.data");
-						hora = obj.getString("info.hora");
-						dataHoraMedicao = new String("\'" + data + " " + hora +"\'");
-						valorMedicao = obj.getString("valor");
-						System.out.println("DataHoraMedicao: " + dataHoraMedicao);
-						System.out.println("Valor: " + valorMedicao);
+						introduzirInformacao(data, hora, valorMedicao, "temperatura");
 					} else if (obj.containsValue("luminosidade")) {
-						System.out.println("Sensor Luminosidade!");
-						data = obj.getString("info.data");
-						hora = obj.getString("info.hora");
-						valorMedicao = obj.getString("valor");
-						dataHoraMedicao = new String("\'" + data + " " + hora +"\'");
-						System.out.println("Hora: " + dataHoraMedicao);
-						System.out.println("Valor: " + valorMedicao);
+						introduzirInformacao(data, hora, valorMedicao, "luminosidade");
 					}
 				}
 			}
@@ -153,13 +128,6 @@ public class MongoRead  {
 		timer.scheduleAtFixedRate(tarefa, segundos, segundos);
 	}
 	
-
-
-
-	public static void main(String[] args) {
-		MongoRead m = new MongoRead(MongoRead.bd, MongoRead.collection);
-		m.Timer();
-	}
 
 
 
