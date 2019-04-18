@@ -13,7 +13,7 @@ public class MongoWrite {
 	
 	
 	public MongoWrite(String bd, String collection) {
-		MongoClient mongoClient1 = new MongoClient();
+		this.mongoClient1 = new MongoClient();
 		db = mongoClient1.getDB(bd);
 		table = db.getCollection(collection);	
 	}

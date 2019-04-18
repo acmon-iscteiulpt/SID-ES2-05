@@ -9,10 +9,16 @@ public class Subscriber extends Cliente {
 
 	private static final String bd = "Dados_sensoresBD";
 	private static final String collection = "dados_luminosidade";
+	
+	private MongoWrite mw;
+	private MongoRead mr;
 
 	public Subscriber(String clientID) {
 		super(clientID);
 		subscribe();
+		this.mw = new MongoWrite(bd, collection);
+		this.mr = new MongoRead(bd, collection);
+		mr.Timer();
 	}
 
 	@Override
@@ -33,8 +39,6 @@ public class Subscriber extends Cliente {
 		// tornar a mensagem recebida num json object para em baixo verificar quais
 		// campos exeitem nesse json
 		JSONObject jsonObj = new JSONObject(message.toString());
-		// ligação à BD
-		MongoWrite mw2 = new MongoWrite(bd, collection);
 
 		if (jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
 			System.out.println("tem |tmp|  , |cell|  , |tim|   ,   |dat|");
@@ -44,8 +48,8 @@ public class Subscriber extends Cliente {
 
 			// JSON from String to Object
 			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
-			mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
-			mw2.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
+			mw.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
+			mw.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
 		}
 		if (jsonObj.has("tmp") && !jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
 			System.out.println("tem tudo menos a cell(luminosidade)");
@@ -56,7 +60,7 @@ public class Subscriber extends Cliente {
 			// JSON from String to Object
 			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
-			mw2.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
+			mw.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
 
 		}
 		if (!jsonObj.has("tmp") && jsonObj.has("cell") && jsonObj.has("dat") && jsonObj.has("tim")) {
@@ -68,10 +72,10 @@ public class Subscriber extends Cliente {
 			// JSON from String to Object
 			MainParser mp = mapper.readValue(message.toString(), MainParser.class);
 
-			mw2.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
+			mw.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
 
 		}
-
+		
 	}
 
 	public static void main(String[] args) {
