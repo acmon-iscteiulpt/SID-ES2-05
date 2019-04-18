@@ -111,17 +111,23 @@ public class MongoRead  {
 				System.out.println("Vou migrar os dados: " + new Date());
 				while(cursor.hasNext()) {
 					BasicDBObject obj = (BasicDBObject) cursor.next();
-					
 					BasicDBObject info = (BasicDBObject) obj.get("info");
 					String data = info.getString("data");
 					String hora = info.getString("hora");
 					String valorMedicao = obj.getString("valor");
 					System.out.println(obj.toJson().toString());
-					if(obj.containsValue("temperatura")) {
+					if(obj.getString("nomeSensor").equals("temperatura")) {
 						introduzirInformacao(data, hora, valorMedicao, "temperatura");
-					} else if (obj.containsValue("luminosidade")) {
+					} else if (obj.getString("nomeSensor").equals("luminosidade")) {
 						introduzirInformacao(data, hora, valorMedicao, "luminosidade");
 					}
+					
+					
+					// passagem do campo exportado de false para true
+					BasicDBObject newDocument = new BasicDBObject();
+					newDocument.append("$set", new BasicDBObject().append("exportado", true));							
+					BasicDBObject searchQuery = new BasicDBObject().append("exportado", false);
+					table.update(searchQuery, newDocument);
 				}
 			}
 			
