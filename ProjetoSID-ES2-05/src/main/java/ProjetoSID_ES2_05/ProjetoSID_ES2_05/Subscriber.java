@@ -37,7 +37,7 @@ public class Subscriber extends Cliente {
 	@Override
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("Mongo recebeu uma mensagem:  " + message.toString());
+		System.out.println("Chegou ao topico" + topic + " a seguinte mensagem:  " + message.toString());
 		// tornar a mensagem recebida num json object para em baixo verificar quais
 		// campos exeitem nesse json
 		JSONObject jsonObj = new JSONObject(message.toString());
@@ -61,8 +61,7 @@ public class Subscriber extends Cliente {
 		
 		
 		if (jsonObj.has("tmp") && jsonObj.has("cell")) {
-			System.out.println("tem |tmp|  , |cell|  , |tim|   ,   |dat|");
-			System.out.println("Inserindo na bd");
+			System.out.println("Inserindo na mongoDB");
 
 			
 			mw.write("temperatura", mp.getTmp(), mp.getDat(), mp.getTim());
@@ -70,7 +69,7 @@ public class Subscriber extends Cliente {
 		}
 		if (jsonObj.has("tmp") && !jsonObj.has("cell")) {
 			System.out.println("tem tudo menos a cell(luminosidade)");
-			System.out.println("Inserindo dados apenas da temperatura na bd");
+			System.out.println("Inserindo na mongoDB dados apenas da temperatura na bd");
 
 
 
@@ -79,8 +78,7 @@ public class Subscriber extends Cliente {
 		}
 		if (!jsonObj.has("tmp") && jsonObj.has("cell")) {
 			System.out.println("tem tudo menos a tmp(temperatura)");
-			System.out.println("Inserindo dados apenas da temperatura na bd");
-
+			System.out.println("Inserindo na mongoDB dados apenas da luminosidade na bd");
 
 			mw.write("luminosidade", mp.getCell(), mp.getDat(), mp.getTim());
 

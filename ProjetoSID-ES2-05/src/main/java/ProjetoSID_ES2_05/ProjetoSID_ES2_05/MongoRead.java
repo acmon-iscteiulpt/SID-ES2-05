@@ -42,7 +42,7 @@ public class MongoRead  {
 			Class.forName("com.mysql.jdbc.Driver");
 			this.conn = null;
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/nossabd_origem", "root", "teste123");
-			System.out.println("Database is connected !");
+			System.out.println("MySql Database is connected !");
 		} catch (Exception e) {
 			System.out.println("Connection failed!");
 			e.printStackTrace();
@@ -108,7 +108,7 @@ public class MongoRead  {
 
 				//lê o mongodb com os valores que ainda nao foram exportados --> guardar lista??
 				DBCursor cursor = table.find();
-				System.out.println("Vou migrar os dados: " + new Date());
+				System.out.println("Migrando os dados da mongoBD para a Mysql: " + new Date());
 				while(cursor.hasNext()) {
 					
 					BasicDBObject obj = (BasicDBObject) cursor.next();
