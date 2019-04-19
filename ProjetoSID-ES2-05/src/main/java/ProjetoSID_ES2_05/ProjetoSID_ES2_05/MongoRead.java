@@ -30,6 +30,8 @@ public class MongoRead  {
 
 	public MongoRead(String bd, String collection) {
 		this.mongoClient = new MongoClient();
+		// usar esta linha em detrimento da anterior, caso tenham criado um cluster de replicas no vosso pc  [Nao apagar estes comments sff ]
+		//this.mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27018,localhost:25017,localhost:23017/?replicaSet=replicademo"));
 		db = mongoClient.getDB(bd);
 		table = db.getCollection(collection);
 		connectToMainBase();

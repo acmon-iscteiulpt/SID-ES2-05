@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 public class MongoWrite {
 
@@ -13,7 +14,8 @@ public class MongoWrite {
 	
 	
 	public MongoWrite(String bd, String collection) {
-		this.mongoClient1 = new MongoClient();
+		//this.mongoClient1 = new MongoClient();
+		this.mongoClient1 = new MongoClient(new MongoClientURI("mongodb://localhost:27018,localhost:25017,localhost:23017/?replicaSet=replicademo"));
 		db = mongoClient1.getDB(bd);
 		table = db.getCollection(collection);	
 	}
