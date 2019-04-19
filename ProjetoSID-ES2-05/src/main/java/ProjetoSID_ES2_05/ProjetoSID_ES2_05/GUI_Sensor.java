@@ -24,7 +24,6 @@ public class GUI_Sensor {
 	 */
 	public GUI_Sensor() {
 		initialize();
-//		new Mongo("1");
 		this.sensor = new Sensor("2");
 	}
 
