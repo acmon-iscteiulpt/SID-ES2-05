@@ -4,16 +4,20 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JSplitPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JPasswordField;
 
 public class GUI_Login {
 
 	private JFrame frame;
 	private JTextField txtUsername;
-	private JTextField txtPassword;
+	private JPasswordField pwdPassword;
 
 	/**
 	 * Launch the application.
@@ -66,12 +70,20 @@ public class GUI_Login {
 		splitPane_3.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		splitPane_2.setRightComponent(splitPane_3);
 		
-		txtPassword = new JTextField();
-		splitPane_3.setLeftComponent(txtPassword);
-		txtPassword.setColumns(10);
-		
 		JButton btnLogin = new JButton("Login");
 		splitPane_3.setRightComponent(btnLogin);
+		
+		btnLogin.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				Login.getInstance().connectToMainBase(txtUsername.getText(), pwdPassword.getText());
+			}
+			
+		});
+		
+		pwdPassword = new JPasswordField();
+		splitPane_3.setLeftComponent(pwdPassword);
 		
 		JLabel lblPassword = new JLabel("Password");
 		splitPane_2.setLeftComponent(lblPassword);
