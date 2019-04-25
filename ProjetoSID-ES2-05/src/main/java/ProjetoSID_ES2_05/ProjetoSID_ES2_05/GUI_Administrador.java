@@ -13,6 +13,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
@@ -23,15 +27,18 @@ public class GUI_Administrador {
 	private JFrame frame;
 	private JTable table;
 	private JTable table_1;
-	private JTable table_2;
-	private JTable table_3;
+	private JTable variaveisMedidasTable;
+	private JTable variaveisTable;
 	private JTable culturaTable;
-	private JTable table_5;
-	private JTable table_6;
-	private JTable table_7;
-	private JTable table_8;
-	private JTable table_9;
+	private JTable medicoesTable;
+	private JTable medicoesLuminosidadeTable;
+	private JTable medicoesTemperaturaTable;
+	private JTable sistemaTable;
+	private JTable utilizadorTable;
 	private Administrador admin;
+	private GUI_Sistema gui_sistema;
+	private GUI_Utilizador gui_utilizador;
+	private GUI_Variavel gui_variavel;
 
 //	/**
 //	 * Launch the application.
@@ -55,6 +62,9 @@ public class GUI_Administrador {
 	 */
 	public GUI_Administrador(Administrador admin) {
 		this.admin = admin;
+		this.gui_sistema = new GUI_Sistema(admin);
+		this.gui_utilizador = new GUI_Utilizador(admin);
+		this.gui_variavel = new GUI_Variavel(admin);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -71,13 +81,13 @@ public class GUI_Administrador {
 		final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane);
 		
+		//Configuração da Tab Cultura
 		JPanel culturaPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) culturaPanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Cultura", null, culturaPanel, null);
 		
 		culturaTable = new JTable();
-		culturaTable.setCellSelectionEnabled(true);
 		culturaTable.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -85,6 +95,10 @@ public class GUI_Administrador {
 				"IDCultura", "NomeCultura", "DescricaoCultura", "IDUtilizador_fk"
 			}
 		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			Class[] columnTypes = new Class[] {
 				Integer.class, String.class, String.class, Integer.class
 			};
@@ -100,53 +114,285 @@ public class GUI_Administrador {
 		culturaTable.getColumnModel().getColumn(3).setPreferredWidth(94);
 		culturaPanel.add(culturaTable);
 		
-		JScrollPane scrollPane = new JScrollPane(culturaTable);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		culturaPanel.add(scrollPane);
+		JScrollPane scrollPaneCultura = new JScrollPane(culturaTable);
+		scrollPaneCultura.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		culturaPanel.add(scrollPaneCultura);
 
 		
+		//Configuração da Tab Medições
 		JPanel medicoesPanel = new JPanel();
+		((FlowLayout)medicoesPanel.getLayout()).setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Medições", null, medicoesPanel, null);
 		
-		table_5 = new JTable();
-		medicoesPanel.add(table_5);
+		medicoesTable = new JTable();
+		medicoesTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"IDMedicoes", "IDCultura_fk", "IDVariavel_fk", "DataHoraMedicao", "ValorMedicao", "IDUtilizador_fk"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, Integer.class, Integer.class, String.class, Integer.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		medicoesTable.getColumnModel().getColumn(0).setResizable(false);
+		medicoesTable.getColumnModel().getColumn(1).setResizable(false);
+		medicoesTable.getColumnModel().getColumn(2).setResizable(false);
+		medicoesTable.getColumnModel().getColumn(3).setResizable(false);
+		medicoesTable.getColumnModel().getColumn(4).setResizable(false);
+		medicoesPanel.add(medicoesTable);
 		
+		JScrollPane scrollPaneMedicoes = new JScrollPane(medicoesTable);
+		scrollPaneMedicoes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		medicoesPanel.add(scrollPaneMedicoes);
+		
+		
+		//Configuração da Tab Medições Luminosidade
 		JPanel medicoesLuminosidadePanel = new JPanel();
+		((FlowLayout)medicoesLuminosidadePanel.getLayout()).setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Medições Luminosidade", null, medicoesLuminosidadePanel, null);
 		
-		table_6 = new JTable();
-		medicoesLuminosidadePanel.add(table_6);
+		medicoesLuminosidadeTable = new JTable();
+		medicoesLuminosidadeTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"IDMedicao", "DataHoraMedicao", "ValorMedicaoLuminosidade"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, String.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		medicoesLuminosidadeTable.getColumnModel().getColumn(0).setResizable(false);
+		medicoesLuminosidadeTable.getColumnModel().getColumn(1).setResizable(false);
+		medicoesLuminosidadeTable.getColumnModel().getColumn(2).setResizable(false);
+		medicoesLuminosidadePanel.add(medicoesLuminosidadeTable);
 		
+		JScrollPane scrollPaneMedicoesLuminosidade = new JScrollPane(medicoesLuminosidadeTable);
+		scrollPaneMedicoesLuminosidade.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		medicoesLuminosidadePanel.add(scrollPaneMedicoesLuminosidade);
+		
+		
+		//Configuração da Tab Medições Temperatura
 		JPanel medicoesTemperaturaPanel = new JPanel();
+		((FlowLayout)medicoesTemperaturaPanel.getLayout()).setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Medições Temperatura", null, medicoesTemperaturaPanel, null);
 		
-		table_7 = new JTable();
-		medicoesTemperaturaPanel.add(table_7);
+		medicoesTemperaturaTable = new JTable();
+		medicoesTemperaturaTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"IDMedicao", "DataHoraMedicao", "ValorMedicaoTemperatura"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, String.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		medicoesTemperaturaTable.getColumnModel().getColumn(0).setResizable(false);
+		medicoesTemperaturaTable.getColumnModel().getColumn(1).setResizable(false);
+		medicoesTemperaturaTable.getColumnModel().getColumn(2).setResizable(false);
+		medicoesTemperaturaPanel.add(medicoesTemperaturaTable);
 		
+		JScrollPane scrollPaneMedicoesTemperatura = new JScrollPane(medicoesTemperaturaTable);
+		scrollPaneMedicoesTemperatura.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		medicoesTemperaturaPanel.add(scrollPaneMedicoesTemperatura);
+		
+		//Configuração do Tab Sistema 
 		JPanel sistemaPanel = new JPanel();
+		((FlowLayout)sistemaPanel.getLayout()).setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Sistema", null, sistemaPanel, null);
 		
-		table_8 = new JTable();
-		sistemaPanel.add(table_8);
+		sistemaTable = new JTable();
+		sistemaTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Sistema_ID", "LimiteSuperiorTemperatura", "LimiteInferiorTemperatura", "LimiteSuperiorLuminosidade", "LimiteInferiorLuminosidade"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, Integer.class, Integer.class, Integer.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		sistemaTable.getColumnModel().getColumn(0).setResizable(false);
+		sistemaTable.getColumnModel().getColumn(1).setResizable(false);
+		sistemaTable.getColumnModel().getColumn(2).setResizable(false);
+		sistemaTable.getColumnModel().getColumn(1).setResizable(false);
+		sistemaTable.getColumnModel().getColumn(2).setResizable(false);
+		sistemaPanel.add(sistemaTable);
 		
+		JScrollPane scrollPaneSistema = new JScrollPane(sistemaTable);
+		scrollPaneSistema.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		sistemaPanel.add(scrollPaneSistema);
+		
+		JButton addSistemaButton = new JButton("Add Sistema");
+		sistemaPanel.add(addSistemaButton);
+		addSistemaButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_sistema.setVisible();
+			}
+		});
+		
+		
+		//Configuração do Tab Utilizador
 		JPanel utilizadorPanel = new JPanel();
+		((FlowLayout)utilizadorPanel.getLayout()).setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Utilizador", null, utilizadorPanel, null);
 		
-		table_9 = new JTable();
-		utilizadorPanel.add(table_9);
+		utilizadorTable = new JTable();
+		utilizadorTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"IDUtilizador", "NomeUtilizador", "TipoUtilizador", "Email"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, String.class, String.class, String.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		utilizadorTable.getColumnModel().getColumn(0).setResizable(false);
+		utilizadorTable.getColumnModel().getColumn(1).setResizable(false);
+		utilizadorTable.getColumnModel().getColumn(2).setResizable(false);
+		utilizadorTable.getColumnModel().getColumn(3).setResizable(false);
+		utilizadorPanel.add(utilizadorTable);
 		
+		JScrollPane scrollPaneUtilizador = new JScrollPane(utilizadorTable);
+		scrollPaneUtilizador.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		utilizadorPanel.add(scrollPaneUtilizador);
+		
+		JButton addUtilizadorBtn = new JButton("Add Utilizador");
+		utilizadorPanel.add(addUtilizadorBtn);
+		addUtilizadorBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_utilizador.turnOnVisible();
+			}
+		});
+		
+		
+		//Configuração do Tab variaveis
 		JPanel variaveisPanel = new JPanel();
+		((FlowLayout)variaveisPanel.getLayout()).setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Variaveis", null, variaveisPanel, null);
 		
-		table_3 = new JTable();
-		variaveisPanel.add(table_3);
+		variaveisTable = new JTable();
+		variaveisTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"IDVariavel", "NomeVariavel"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, String.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		variaveisTable.getColumnModel().getColumn(0).setResizable(false);
+		variaveisTable.getColumnModel().getColumn(1).setResizable(false);
+		variaveisPanel.add(variaveisTable);
 		
+		JScrollPane scrollPaneVariaveis = new JScrollPane(variaveisTable);
+		scrollPaneVariaveis.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		variaveisPanel.add(scrollPaneVariaveis);
+		
+		JButton addVariavelBtn = new JButton("Add Variavel");
+		variaveisPanel.add(addVariavelBtn);
+		addVariavelBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_variavel.turnOnVisible();
+			}
+		});
+		
+		
+		//Configuração do Tab Variaveis Medidas
 		JPanel variaveisMedidasPanel = new JPanel();
-		tabbedPane.addTab("variaveisMedidas", null, variaveisMedidasPanel, null);
+		((FlowLayout)variaveisMedidasPanel.getLayout()).setAlignment(FlowLayout.LEFT);
+		tabbedPane.addTab("Variaveis Medidas", null, variaveisMedidasPanel, null);
 		
-		table_2 = new JTable();
-		variaveisMedidasPanel.add(table_2);
+		variaveisMedidasTable = new JTable();
+		variaveisMedidasTable.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"VariaveisMedidas_ID", "IDCultura_fk", "IDVariavel_fk", "LimiteSuperior", "LimiteInferior"
+				}
+			) {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+				Class[] columnTypes = new Class[] {
+					Integer.class, Integer.class, Integer.class, Integer.class, Integer.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+			});
+		variaveisMedidasTable.getColumnModel().getColumn(0).setResizable(false);
+		variaveisMedidasTable.getColumnModel().getColumn(1).setResizable(false);
+		variaveisMedidasTable.getColumnModel().getColumn(2).setResizable(false);
+		variaveisMedidasTable.getColumnModel().getColumn(3).setResizable(false);
+		variaveisMedidasTable.getColumnModel().getColumn(4).setResizable(false);
+		variaveisMedidasPanel.add(variaveisMedidasTable);
 		
+		JScrollPane scrollPaneVariaveisMedidas = new JScrollPane(variaveisMedidasTable);
+		scrollPaneVariaveisMedidas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		variaveisMedidasPanel.add(scrollPaneVariaveisMedidas);
+		
+		
+		//Configuração do Tab Alertas Sensor
 		JPanel alertasSensorPanel = new JPanel();
 		tabbedPane.addTab("Alertas Sensor", null, alertasSensorPanel, null);
 		
@@ -163,14 +409,37 @@ public class GUI_Administrador {
 
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
-//				JLabel label = ((JLabel) tabbedPane.getSelectedComponent());
 				int index = tabbedPane.getSelectedIndex();
 				System.out.println("Tab: " + tabbedPane.getSelectedIndex());
-				System.out.println("Tab: " + tabbedPane.getTitleAt(index));
 				DefaultTableModel model;
-				if(tabbedPane.getTitleAt(index).equals("Cultura")) {
+				String title = tabbedPane.getTitleAt(index);
+				System.out.println("Tab: " + title);
+				if(title.equals("Cultura")) {
 					model = admin.getCulturaTable(culturaTable);
 					culturaTable.setModel(model);
+				} else if (title.equals("Medições")) {
+//					((DefaultTableModel)medicoesTable.getModel()).setRowCount(0);
+					model = admin.getMedicoesTable(medicoesTable);
+					medicoesTable.setModel(model);
+				} else if (title.equals("Medições Luminosidade")) {
+					model = admin.getMedicoesLuminosidadeTable(medicoesLuminosidadeTable);
+					medicoesLuminosidadeTable.setModel(model);
+				} else if (title.equals("Medições Temperatura")) {
+					model = admin.getMedicoesTemperaturaTable(medicoesTemperaturaTable);
+					medicoesTemperaturaTable.setModel(model);
+				} else if (title.equals("Utilizador")) {
+					model = admin.getUtilizadorTable(utilizadorTable);
+					utilizadorTable.setModel(model);
+				} else if (title.equals("Sistema")) {
+					model = admin.getSistemaTable(sistemaTable);
+//					((DefaultTableModel)sistemaTable.getModel()).setRowCount(0);
+					sistemaTable.setModel(model);
+				} else if (title.equals("Variaveis")) {
+					model = admin.getVariaveisTable(variaveisTable);
+					variaveisTable.setModel(model);
+				} else if (title.equals("Variaveis Medidas")) {
+					model = admin.getVariaveisMedidasTable(variaveisMedidasTable);
+					variaveisMedidasTable.setModel(model);
 				}
 				
 				
