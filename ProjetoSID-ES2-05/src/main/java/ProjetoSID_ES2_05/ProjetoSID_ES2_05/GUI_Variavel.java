@@ -15,15 +15,21 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.AbstractListModel;
+import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class GUI_Variavel {
 
 	private JFrame frame;
 	private Administrador admin;
-	private JTextField culturaField;
 	private JTextField nomeVariavelField;
 	private JTextField limiteSuperiorField;
 	private JTextField limiteInferiorField;
+	private JComboBox<String> culturaBox;
 
 	/**
 	 * Launch the application.
@@ -71,9 +77,8 @@ public class GUI_Variavel {
 		JLabel lblCultura = new JLabel("Cultura");
 		splitPane_1.setLeftComponent(lblCultura);
 		
-		culturaField = new JTextField();
-		splitPane_1.setRightComponent(culturaField);
-		culturaField.setColumns(10);
+		this.culturaBox = new JComboBox<String>();
+		splitPane_1.setRightComponent(culturaBox);
 		
 		JSplitPane splitPane_2 = new JSplitPane();
 		panel.add(splitPane_2);
@@ -111,18 +116,31 @@ public class GUI_Variavel {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String cultura = culturaField.getText();
-				String nomeVariavel = nomeVariavelField.getText();
-				int limiteSuperior = Integer.parseInt(limiteSuperiorField.getText());
-				int limiteInferior = Integer.parseInt(limiteInferiorField.getText());
-				admin.addVariavel(cultura, nomeVariavel, limiteSuperior, limiteInferior);
-				frame.setVisible(false);
+				try {
+					String cultura = (String) culturaBox.getSelectedItem();
+					String nomeVariavel = nomeVariavelField.getText();
+					int limiteSuperior = Integer.parseInt(limiteSuperiorField.getText());
+					int limiteInferior = Integer.parseInt(limiteInferiorField.getText());
+					System.out.println("Cultura seleccionada: " + cultura);
+					admin.addVariavel(cultura, nomeVariavel, limiteSuperior, limiteInferior);
+					frame.setVisible(false);
+				} catch (Exception e2) {
+					// TODO: handle exception
+					JOptionPane.showMessageDialog(frame, "Preencha todos os campos!");
+				}
+				
 			}
 		});
 	}
 	
 	public void turnOnVisible() {
 		this.frame.setVisible(true);
+	}
+	
+	public void resetCulturaBox() {
+		culturaBox.removeAllItems();
+		DefaultComboBoxModel<String> box = admin.getNomeCultura();
+		culturaBox.setModel(box);
 	}
 
 }

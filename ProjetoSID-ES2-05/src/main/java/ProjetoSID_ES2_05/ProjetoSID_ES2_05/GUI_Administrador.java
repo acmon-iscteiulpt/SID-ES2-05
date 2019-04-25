@@ -351,6 +351,8 @@ public class GUI_Administrador {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				//Definir JComboBox
+				gui_variavel.resetCulturaBox();
 				gui_variavel.turnOnVisible();
 			}
 		});

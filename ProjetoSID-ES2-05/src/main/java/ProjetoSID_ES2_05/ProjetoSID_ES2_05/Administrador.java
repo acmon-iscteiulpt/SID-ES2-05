@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -272,6 +275,8 @@ public class Administrador {
 			cStmt.setString(2, tipoUtilizador);
 			cStmt.setString(3, email);
 			cStmt.setString(4, password);
+			cStmt.execute();
+			cStmt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -286,10 +291,32 @@ public class Administrador {
 			cStmt.setString(2, nomeVariavel);
 			cStmt.setLong(3, limiteSuperior);
 			cStmt.setLong(4, limiteInferior);
+			cStmt.execute();
+			cStmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public DefaultComboBoxModel<String> getNomeCultura() {
+		try {
+			Statement stmt = conn.createStatement();
+			String querySelectCultura = "SELECT NomeCultura FROM cultura";
+			ResultSet rs = stmt.executeQuery(querySelectCultura);
+			String nomeCultura;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				nomeCultura = rs.getString("NomeCultura");
+				box.addElement(nomeCultura);
+			}
+			return box;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao procurar pelo nome das culturas");
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public static void main(String[] args) {
