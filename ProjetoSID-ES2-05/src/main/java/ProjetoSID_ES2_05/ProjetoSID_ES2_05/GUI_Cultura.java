@@ -7,6 +7,9 @@ import java.awt.FlowLayout;
 import javax.swing.JSplitPane;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -16,27 +19,29 @@ public class GUI_Cultura {
 	private JFrame frame;
 	private JTextField culturaField;
 	private JTextField descricaoCulturaField;
+	private Investigador investigador;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI_Cultura window = new GUI_Cultura();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					GUI_Cultura window = new GUI_Cultura();
+//					window.frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Cultura() {
+	public GUI_Cultura(Investigador investigador) {
+		this.investigador = investigador;
 		initialize();
 	}
 
@@ -78,6 +83,18 @@ public class GUI_Cultura {
 		
 		JButton btnAdd = new JButton("Add");
 		splitPane.setRightComponent(btnAdd);
+		btnAdd.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String cultura = culturaField.getText();
+				String descricaoCultura = descricaoCulturaField.getText();
+				investigador.addCultura(cultura, descricaoCultura);
+				frame.setVisible(false);
+				culturaField.setText("");
+				descricaoCulturaField.setText("");
+			}
+		});
 	}
 	
 	public void turnOnVisible() {

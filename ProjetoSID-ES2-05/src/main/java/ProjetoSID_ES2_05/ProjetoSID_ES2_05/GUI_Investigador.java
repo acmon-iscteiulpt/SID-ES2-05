@@ -16,6 +16,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 
 public class GUI_Investigador {
 
@@ -24,6 +26,8 @@ public class GUI_Investigador {
 	private Investigador investigador;
 	private JTabbedPane tabbedPane;
 	private GUI_Cultura gui_cultura;
+	private GUI_Cultura_Delete gui_cultura_delete;
+	private JTable medicoesTable;
 
 	/**
 	 * Launch the application.
@@ -46,7 +50,8 @@ public class GUI_Investigador {
 	 */
 	public GUI_Investigador(Investigador investigador) {
 		this.investigador = investigador;
-		this.gui_cultura = new GUI_Cultura();
+		this.gui_cultura = new GUI_Cultura(investigador);
+		this.gui_cultura_delete = new GUI_Cultura_Delete(investigador);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -113,9 +118,57 @@ public class GUI_Investigador {
 			}
 		});
 		
+		refreshCulturaBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DefaultTableModel model = investigador.getCulturaTable(culturaTable);
+				culturaTable.setModel(model);
+			}
+		});
+		
+		deleteCulturaBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_cultura_delete.turnOnVisible();
+			}
+		});
 		
 		JPanel medicoesPanel = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) medicoesPanel.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		tabbedPane.addTab("Medições", null, medicoesPanel, null);
+		
+		medicoesTable = new JTable();
+		medicoesTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"IDMedicoes", "IDCultura_FK", "IDVariavel_FK", "DataHoraMedicao", "ValorMedicao"
+			}
+		));
+		medicoesTable.getColumnModel().getColumn(2).setPreferredWidth(88);
+		medicoesTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+		medicoesPanel.add(medicoesTable);
+		
+		JScrollPane scrollPane = new JScrollPane(medicoesTable);
+		medicoesPanel.add(scrollPane);
+		
+		JPanel panel = new JPanel();
+		medicoesPanel.add(panel);
+		panel.setLayout(new GridLayout(3, 0, 2, 4));
+		
+		JButton refreshBtn = new JButton("Refresh");
+		panel.add(refreshBtn);
+		
+		JButton addMedicaoBtn = new JButton("Add Medicao");
+		panel.add(addMedicaoBtn);
+		
+		JButton deleteMedicaoBtn = new JButton("Delete");
+		panel.add(deleteMedicaoBtn);
+		
+
 		
 		tabbedPane.getModel().addChangeListener(new ChangeListener() {
 			

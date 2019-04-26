@@ -1,5 +1,6 @@
 package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -44,12 +45,42 @@ public class Investigador {
 		}
 	}
 	
-	public DefaultTableModel getCulturaTable(JTable table) {
+	public void addCultura(String nomeCultura, String descricaoCultura) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call insere_cultura(?, ?)}");
+			cStmt.setString(1, nomeCultura);
+			cStmt.setString(2, descricaoCultura);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	//Criar SP que faz delete da cultura 
+	//Perguntar se o nome da cultura vai ser única ou não
+	
+	//Se não for única, temos que eliminar a tabela cultura pelo ID 
+	public void deleteCultura(int idCultura) {
 		try {
 			Statement stmt = conn.createStatement();
-			String querySelectCultura = "SELECT * FROM cultura";
-			System.out.println("Query: " + querySelectCultura);
-			ResultSet rs = stmt.executeQuery(querySelectCultura);
+			String queryDeleteCultura = "DELETE FROM cultura WHERE IDCultura=" + idCultura + ";";
+			stmt.executeUpdate(queryDeleteCultura);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Não pode eliminar tabelas de outros investigadores!");
+		}
+	}
+	
+	public DefaultTableModel getCulturaTable(JTable table) {
+		try {
+//			Statement stmt = conn.createStatement();
+//			String querySelectCultura = "SELECT * FROM cultura";
+//			System.out.println("Query: " + querySelectCultura);
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
 			Object [] row = new Object[4];
@@ -60,6 +91,8 @@ public class Investigador {
 				row[3] = rs.getString("IDUtilizador_fk");
 				model.addRow(row);
 			}
+			rs.close();
+			cStmt.close();
 			return model;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -67,6 +100,37 @@ public class Investigador {
 		}
 		return null;
 	}
+	
+	public DefaultTableModel getMedicaoTable(JTable table) {
+		try {
+//			Statement stmt = conn.createStatement();
+//			String querySelectCultura = "SELECT * FROM cultura";
+//			System.out.println("Query: " + querySelectCultura);
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			((DefaultTableModel)table.getModel()).setRowCount(0);
+			DefaultTableModel model = (DefaultTableModel)table.getModel();
+			Object [] row = new Object[6];
+			while(rs.next()) {
+				row[0] = rs.getString("IDMedicoes");
+				row[1] = rs.getString("IDCultura_fk");
+				row[2] = rs.getString("IDVariavel_fk");
+				row[3] = rs.getString("DataHoraMedicao");
+				row[4] = rs.getString("ValorMedicao");
+				row[5] = rs.getString("IDUtilizador_fk");
+				model.addRow(row);
+			}
+			rs.close();
+			cStmt.close();
+			return model;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 	
 	public static void main(String[] args) {
