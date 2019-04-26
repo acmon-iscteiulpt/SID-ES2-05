@@ -17,6 +17,7 @@ public class MongoWrite {
 		this.mongoClient1 = new MongoClient();
 		// usar esta linha em detrimento da anterior, caso tenham criado um cluster de replicas no vosso pc  [Nao apagar estes comments sff ] 
 		//this.mongoClient1 = new MongoClient(new MongoClientURI("mongodb://localhost:27018,localhost:25017,localhost:23017/?replicaSet=replicademo"));
+		db = mongoClient1.getDB(bd);
 		table = db.getCollection(collection);	
 	}
 	

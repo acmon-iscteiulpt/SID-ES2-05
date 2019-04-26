@@ -52,7 +52,7 @@ public class Subscriber extends Cliente {
 		
 		Date data_hora = new Date();                                                 // ir buscar data e hora atual, ou seja, do momento da mediçao do sensor
 		SimpleDateFormat formato_data = new SimpleDateFormat("dd/MM/Y");
-		SimpleDateFormat formato_hora = new SimpleDateFormat("hh:mm:ss");
+		SimpleDateFormat formato_hora = new SimpleDateFormat("HH:mm:ss");
 				
 		mp.setDat(formato_data.format(data_hora).toString());
 		mp.setTim(formato_hora.format(data_hora).toString());
