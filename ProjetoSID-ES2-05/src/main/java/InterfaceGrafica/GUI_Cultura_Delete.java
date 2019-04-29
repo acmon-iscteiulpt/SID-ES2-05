@@ -1,4 +1,4 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
+package InterfaceGrafica;
 
 import java.awt.EventQueue;
 
@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Investigador;
 
 public class GUI_Cultura_Delete {
 

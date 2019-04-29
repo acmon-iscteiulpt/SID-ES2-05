@@ -1,4 +1,4 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
+package InterfaceGrafica;
 
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
@@ -11,6 +11,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Sensor;
+
 import javax.swing.JLabel;
 
 public class GUI_Sensor {

@@ -2,6 +2,8 @@ package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
 
 import java.awt.EventQueue;
 
+import InterfaceGrafica.GUI_Sensor;
+
 /**
  * Hello world!
  *

@@ -7,10 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import InterfaceGrafica.GUI_Investigador;
 
 public class Investigador {
 	
@@ -106,7 +109,7 @@ public class Investigador {
 //			Statement stmt = conn.createStatement();
 //			String querySelectCultura = "SELECT * FROM cultura";
 //			System.out.println("Query: " + querySelectCultura);
-			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			CallableStatement cStmt = conn.prepareCall("{call mostra_medicoes_utilizador()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
 			((DefaultTableModel)table.getModel()).setRowCount(0);
@@ -129,6 +132,101 @@ public class Investigador {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public DefaultComboBoxModel<String> getNomeCultura() {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			String nomeCultura;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				nomeCultura = rs.getString("NomeCultura");
+				box.addElement(nomeCultura);
+			}
+			cStmt.close();
+			return box;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao procurar pelo nome das culturas");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public DefaultComboBoxModel<String> getNomeVariavel() {
+		try {
+//			CallableStatement cStmt = conn.prepareCall("{call mostra_variavel_utilizador()}");
+//			cStmt.execute();
+//			ResultSet rs = cStmt.getResultSet();
+			String querySelectVariavel = "SELECT * FROM variavel";
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(querySelectVariavel);
+			String nomeVariavel;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				nomeVariavel = rs.getString("NomeVariavel");
+				box.addElement(nomeVariavel);
+			}
+			rs.close();
+			return box;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return null;
+	}
+	
+	public DefaultComboBoxModel<String> getID_MedicaoTable() {
+		try {
+//			Statement stmt = conn.createStatement();
+//			String querySelectCultura = "SELECT * FROM cultura";
+//			System.out.println("Query: " + querySelectCultura);
+			CallableStatement cStmt = conn.prepareCall("{call mostra_medicoes_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			String id;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				id = rs.getString("IDMedicoes");
+				box.addElement(id);
+			}
+			rs.close();
+			cStmt.close();
+			return box;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	//SP ainda nao funciona
+	public void addMedicaoTable(String nomeCultura,String nomeVariavel ,String data, String time, String valorMedicao) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call inserir_medicao(?, ?, ?, ?)}");
+			String dataHora = data + " " + time;
+			cStmt.setString(1, nomeCultura);
+			cStmt.setString(2, nomeVariavel);
+			cStmt.setString(3, dataHora);
+			cStmt.setString(4, valorMedicao);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void deleteMedicaoTable(String idMedicao) {
+		try {
+			int id = Integer.parseInt(idMedicao);
+			String queryDelete = "DELETE FROM medicoes WHERE IDMedicoes=" + id + ";";
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate(queryDelete);
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "ID tem que ser um valor numérico!");
+		}
 	}
 	
 	

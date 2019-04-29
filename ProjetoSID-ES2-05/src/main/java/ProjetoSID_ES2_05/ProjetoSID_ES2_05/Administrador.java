@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import InterfaceGrafica.GUI_Administrador;
+
 public class Administrador {
 	
 	private Connection conn;
@@ -195,6 +197,39 @@ public class Administrador {
 		return null;
 	}
 	
+	public DefaultComboBoxModel<String> getNomeUtilizadorTable() {
+		try {
+			Statement stmt = conn.createStatement();
+			String querySelectCultura = "SELECT * FROM utilizador";
+			System.out.println("Query: " + querySelectCultura);
+			ResultSet rs = stmt.executeQuery(querySelectCultura);
+			String idUtilizador;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				idUtilizador = rs.getString("NomeUtilizador");
+				box.addElement(idUtilizador);
+			}
+			return box;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void deleteUtilizador(String nomeUtilizador) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call RemoverUtilizador(?)}");
+			cStmt.setString(1, nomeUtilizador);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Não foi possivel eliminar o utilizador");
+		}
+	}
+	
 	public DefaultTableModel getVariaveisTable(JTable table) {
 		try {
 			Statement stmt = conn.createStatement();
@@ -319,8 +354,46 @@ public class Administrador {
 		return null;
 	}
 	
+	public DefaultComboBoxModel<String> getNomeVariavel() {
+		// TODO Auto-generated method stub
+		try {
+			String querySelectVariavel = "SELECT * FROM variavel";
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(querySelectVariavel);
+			String nomeVariavel;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				nomeVariavel = rs.getString("NomeVariavel");
+				box.addElement(nomeVariavel);
+			}
+			rs.close();
+			return box;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void deleteVariavel(String nomeVariavel) {
+		try {
+			String deleteQuery = "DELETE FROM variavel WHERE NomeVariavel=" +"\"" +nomeVariavel + "\";";
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate(deleteQuery);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Não foi possível eliminar a variável");
+		}
+	}
+
+	
+	
+	
 	public static void main(String[] args) {
 		new Administrador("root", "teste123");
 	}
+
+
 
 }

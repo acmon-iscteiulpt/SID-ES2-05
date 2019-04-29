@@ -1,4 +1,4 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
+package InterfaceGrafica;
 
 import java.awt.EventQueue;
 
@@ -11,6 +11,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Administrador;
+
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.JPanel;

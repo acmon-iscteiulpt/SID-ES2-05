@@ -1,4 +1,4 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
+package InterfaceGrafica;
 
 import java.awt.EventQueue;
 
@@ -12,6 +12,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Administrador;
+
 import javax.swing.JButton;
 
 public class GUI_Sistema {

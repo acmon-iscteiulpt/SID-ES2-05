@@ -1,4 +1,4 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
+package InterfaceGrafica;
 
 import java.awt.EventQueue;
 
@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JSplitPane;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Login;
+
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 
@@ -77,7 +80,11 @@ public class GUI_Login {
 
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				Login.getInstance().connectToMainBase(txtUsername.getText(), pwdPassword.getText());
+				boolean connected = Login.getInstance().connectToMainBase(txtUsername.getText(), pwdPassword.getText());
+				
+				if(connected) {
+					frame.setVisible(false);
+				}
 			}
 			
 		});
