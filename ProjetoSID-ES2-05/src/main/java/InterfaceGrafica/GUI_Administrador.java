@@ -1,26 +1,25 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
-
-import java.awt.EventQueue;
+package InterfaceGrafica;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Administrador;
+
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 
 public class GUI_Administrador {
 
@@ -38,24 +37,10 @@ public class GUI_Administrador {
 	private Administrador admin;
 	private GUI_Sistema gui_sistema;
 	private GUI_Utilizador gui_utilizador;
+	private GUI_Utilizador_Delete gui_utilizador_delete;
 	private GUI_Variavel gui_variavel;
+	private GUI_Variavel_Delete gui_variavel_delete;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Administrador admin = new Administrador("root", "teste123");
-//					GUI_Administrador window = new GUI_Administrador(admin);
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the application.
@@ -64,7 +49,9 @@ public class GUI_Administrador {
 		this.admin = admin;
 		this.gui_sistema = new GUI_Sistema(admin);
 		this.gui_utilizador = new GUI_Utilizador(admin);
+		this.gui_utilizador_delete = new GUI_Utilizador_Delete(admin);
 		this.gui_variavel = new GUI_Variavel(admin);
+		this.gui_variavel_delete = new GUI_Variavel_Delete(admin);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -302,13 +289,39 @@ public class GUI_Administrador {
 		scrollPaneUtilizador.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		utilizadorPanel.add(scrollPaneUtilizador);
 		
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new GridLayout(3,1,4,4));
+		utilizadorPanel.add(buttonsPanel);
+		
+		JButton refreshUtilizadorBtn = new JButton("Refresh");
+		buttonsPanel.add(refreshUtilizadorBtn);
+		refreshUtilizadorBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DefaultTableModel model = admin.getUtilizadorTable(utilizadorTable);
+				utilizadorTable.setModel(model);
+			}
+		});
+		
 		JButton addUtilizadorBtn = new JButton("Add Utilizador");
-		utilizadorPanel.add(addUtilizadorBtn);
+		buttonsPanel.add(addUtilizadorBtn);
 		addUtilizadorBtn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				gui_utilizador.turnOnVisible();
+			}
+		});
+		
+		JButton deleteUtilizadorBtn = new JButton("Delete");
+		buttonsPanel.add(deleteUtilizadorBtn);
+		deleteUtilizadorBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_utilizador_delete.resetUtilizadorBox();
+				gui_utilizador_delete.turnOnVisible();
 			}
 		});
 		
@@ -345,8 +358,23 @@ public class GUI_Administrador {
 		scrollPaneVariaveis.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		variaveisPanel.add(scrollPaneVariaveis);
 		
+		JPanel variavelPanel = new JPanel();
+		variavelPanel.setLayout(new GridLayout(3, 1, 4, 4));
+		variaveisPanel.add(variavelPanel);
+		
+		JButton refreshVariavelBtn = new JButton("Refresh");
+		variavelPanel.add(refreshVariavelBtn);
+		refreshVariavelBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DefaultTableModel model = admin.getVariaveisTable(variaveisTable);
+				variaveisTable.setModel(model);
+			}
+		});
+		
 		JButton addVariavelBtn = new JButton("Add Variavel");
-		variaveisPanel.add(addVariavelBtn);
+		variavelPanel.add(addVariavelBtn);
 		addVariavelBtn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -356,6 +384,18 @@ public class GUI_Administrador {
 				gui_variavel.turnOnVisible();
 			}
 		});
+		
+		JButton deleteVariavelBtn = new JButton("Delete");
+		variavelPanel.add(deleteVariavelBtn);
+		deleteVariavelBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_variavel_delete.resetVariavelBox();
+				gui_variavel_delete.turnOnVisible();
+			}
+		});
+		
 		
 		
 		//Configuração do Tab Variaveis Medidas

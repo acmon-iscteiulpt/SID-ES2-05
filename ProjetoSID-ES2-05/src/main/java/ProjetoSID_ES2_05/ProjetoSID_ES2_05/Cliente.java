@@ -51,7 +51,7 @@ public abstract class Cliente implements MqttCallback{
 		}
 	}
 	
-	protected void disconnectServer() {
+	public void disconnectServer() {
 		try {
 			client.disconnect();
 			System.out.println("Disconnected");

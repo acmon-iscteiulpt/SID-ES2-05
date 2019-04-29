@@ -1,6 +1,4 @@
-package ProjetoSID_ES2_05.ProjetoSID_ES2_05;
-
-import java.awt.EventQueue;
+package InterfaceGrafica;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,11 +11,12 @@ import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+
+import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Investigador;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 
 public class GUI_Investigador {
 
@@ -27,6 +26,8 @@ public class GUI_Investigador {
 	private JTabbedPane tabbedPane;
 	private GUI_Cultura gui_cultura;
 	private GUI_Cultura_Delete gui_cultura_delete;
+	private GUI_Medicoes gui_medicoes;
+	private GUI_Medicoes_Delete gui_medicoes_delete;
 	private JTable medicoesTable;
 
 	/**
@@ -52,6 +53,8 @@ public class GUI_Investigador {
 		this.investigador = investigador;
 		this.gui_cultura = new GUI_Cultura(investigador);
 		this.gui_cultura_delete = new GUI_Cultura_Delete(investigador);
+		this.gui_medicoes = new GUI_Medicoes(investigador);
+		this.gui_medicoes_delete = new GUI_Medicoes_Delete(investigador);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -161,12 +164,39 @@ public class GUI_Investigador {
 		
 		JButton refreshBtn = new JButton("Refresh");
 		panel.add(refreshBtn);
+		refreshBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DefaultTableModel model = investigador.getMedicaoTable(medicoesTable);
+				medicoesTable.setModel(model);
+			}
+		});
 		
 		JButton addMedicaoBtn = new JButton("Add Medicao");
 		panel.add(addMedicaoBtn);
+		addMedicaoBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//Passar a lista de medicoes apenas do utilizador
+				gui_medicoes.resetCulturaBox();
+				gui_medicoes.resetVariavelBox();
+				gui_medicoes.turnOnVisible();
+			}
+		});
 		
 		JButton deleteMedicaoBtn = new JButton("Delete");
 		panel.add(deleteMedicaoBtn);
+		deleteMedicaoBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_medicoes_delete.resetMedicaoBox();
+				gui_medicoes_delete.turnOnVisible();
+			}
+		});
+		
 		
 
 		
@@ -182,6 +212,9 @@ public class GUI_Investigador {
 				if(title.equals("Cultura")) {
 					model = investigador.getCulturaTable(culturaTable);
 					culturaTable.setModel(model);
+				} else if (title.equals("Medições")) {
+					model = investigador.getMedicaoTable(medicoesTable);
+					medicoesTable.setModel(model);
 				}
 			}
 		});
