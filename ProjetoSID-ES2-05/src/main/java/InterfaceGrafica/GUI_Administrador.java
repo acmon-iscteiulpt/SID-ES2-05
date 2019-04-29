@@ -35,10 +35,10 @@ public class GUI_Administrador {
 	private JTable sistemaTable;
 	private JTable utilizadorTable;
 	private Administrador admin;
-	private GUI_Sistema gui_sistema;
-	private GUI_Utilizador gui_utilizador;
+	private GUI_Sistema_Add gui_sistema;
+	private GUI_Utilizador_Add gui_utilizador;
 	private GUI_Utilizador_Delete gui_utilizador_delete;
-	private GUI_Variavel gui_variavel;
+	private GUI_Variavel_Add gui_variavel;
 	private GUI_Variavel_Delete gui_variavel_delete;
 
 
@@ -47,10 +47,10 @@ public class GUI_Administrador {
 	 */
 	public GUI_Administrador(Administrador admin) {
 		this.admin = admin;
-		this.gui_sistema = new GUI_Sistema(admin);
-		this.gui_utilizador = new GUI_Utilizador(admin);
+		this.gui_sistema = new GUI_Sistema_Add(admin);
+		this.gui_utilizador = new GUI_Utilizador_Add(admin);
 		this.gui_utilizador_delete = new GUI_Utilizador_Delete(admin);
-		this.gui_variavel = new GUI_Variavel(admin);
+		this.gui_variavel = new GUI_Variavel_Add(admin);
 		this.gui_variavel_delete = new GUI_Variavel_Delete(admin);
 		initialize();
 		frame.setVisible(true);

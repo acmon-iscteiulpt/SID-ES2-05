@@ -32,7 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-public class GUI_Medicoes {
+public class GUI_Medicoes_Add {
 
 	private JFrame frame;
 	private JDateChooser dataChooser;
@@ -61,7 +61,7 @@ public class GUI_Medicoes {
 	/**
 	 * Create the application.
 	 */
-	public GUI_Medicoes(Investigador investigador) {
+	public GUI_Medicoes_Add(Investigador investigador) {
 		this.investigador = investigador;
 		initialize();
 	}

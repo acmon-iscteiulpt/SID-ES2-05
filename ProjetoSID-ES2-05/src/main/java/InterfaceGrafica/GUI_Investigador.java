@@ -24,9 +24,9 @@ public class GUI_Investigador {
 	private JTable culturaTable;
 	private Investigador investigador;
 	private JTabbedPane tabbedPane;
-	private GUI_Cultura gui_cultura;
+	private GUI_Cultura_Add gui_cultura;
 	private GUI_Cultura_Delete gui_cultura_delete;
-	private GUI_Medicoes gui_medicoes;
+	private GUI_Medicoes_Add gui_medicoes;
 	private GUI_Medicoes_Delete gui_medicoes_delete;
 	private JTable medicoesTable;
 
@@ -51,9 +51,9 @@ public class GUI_Investigador {
 	 */
 	public GUI_Investigador(Investigador investigador) {
 		this.investigador = investigador;
-		this.gui_cultura = new GUI_Cultura(investigador);
+		this.gui_cultura = new GUI_Cultura_Add(investigador);
 		this.gui_cultura_delete = new GUI_Cultura_Delete(investigador);
-		this.gui_medicoes = new GUI_Medicoes(investigador);
+		this.gui_medicoes = new GUI_Medicoes_Add(investigador);
 		this.gui_medicoes_delete = new GUI_Medicoes_Delete(investigador);
 		initialize();
 		frame.setVisible(true);
