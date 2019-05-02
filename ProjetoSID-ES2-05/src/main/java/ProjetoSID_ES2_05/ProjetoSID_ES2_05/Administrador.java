@@ -384,6 +384,41 @@ public class Administrador {
 			JOptionPane.showMessageDialog(null, "Não foi possível eliminar a variável");
 		}
 	}
+	
+	public void updateUtilizador(String nomeUtilizador, String newNomeUtilizador, String tipoUtilizador, String email, String password) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call AlterarUtilizador(?, ?, ?, ?, ?)}");
+			cStmt.setString(1, nomeUtilizador);
+			cStmt.setString(2, newNomeUtilizador);
+			cStmt.setString(3, tipoUtilizador);
+			cStmt.setString(4, email);
+			cStmt.setString(5, password);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Não foi possível modificar o utilizador");
+		}
+	}
+	
+	public String[] searchUtilizador(String nomeUtilizador) {
+		try {
+			String[] v = new String[3];
+			Statement stmt = conn.createStatement();
+			String querySelect = "SELECT * FROM utilizador WHERE NomeUtilizador=" + "\"" + nomeUtilizador + "\";";
+			ResultSet rs = stmt.executeQuery(querySelect);
+			rs.next();
+			v[0] = rs.getString("NomeUtilizador");
+			v[1] = rs.getString("TipoUtilizador");
+			v[2] = rs.getString("Email");
+			return v;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
 
 	
 	

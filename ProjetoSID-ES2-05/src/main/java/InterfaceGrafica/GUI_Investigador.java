@@ -26,25 +26,12 @@ public class GUI_Investigador {
 	private JTabbedPane tabbedPane;
 	private GUI_Cultura_Add gui_cultura;
 	private GUI_Cultura_Delete gui_cultura_delete;
+	private GUI_Cultura_Update gui_cultura_update;
 	private GUI_Medicoes_Add gui_medicoes;
 	private GUI_Medicoes_Delete gui_medicoes_delete;
+	private GUI_Medicoes_Update gui_medicoes_update;
 	private JTable medicoesTable;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					GUI_Investigador window = new GUI_Investigador();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the application.
@@ -53,8 +40,10 @@ public class GUI_Investigador {
 		this.investigador = investigador;
 		this.gui_cultura = new GUI_Cultura_Add(investigador);
 		this.gui_cultura_delete = new GUI_Cultura_Delete(investigador);
+		this.gui_cultura_update = new GUI_Cultura_Update(investigador);
 		this.gui_medicoes = new GUI_Medicoes_Add(investigador);
 		this.gui_medicoes_delete = new GUI_Medicoes_Delete(investigador);
+		this.gui_medicoes_update = new GUI_Medicoes_Update(investigador);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -104,12 +93,14 @@ public class GUI_Investigador {
 		culturaPanel.add(scrollPaneCultura);
 		
 		JPanel panel2 = new JPanel();
-		panel2.setLayout(new GridLayout(3, 0, 2, 4));
+		panel2.setLayout(new GridLayout(4, 0, 2, 4));
 		JButton addCulturaBtn = new JButton("Add Cultura");
+		JButton updateCulturaBtn = new JButton("Update");
 		JButton refreshCulturaBtn = new JButton("Refresh");
 		JButton deleteCulturaBtn = new JButton("Delete");
 		panel2.add(refreshCulturaBtn);
 		panel2.add(addCulturaBtn);
+		panel2.add(updateCulturaBtn);
 		panel2.add(deleteCulturaBtn);
 		culturaPanel.add(panel2);
 		
@@ -138,6 +129,17 @@ public class GUI_Investigador {
 			}
 		});
 		
+		updateCulturaBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_cultura_update.resetCulturaBox();
+				gui_cultura_update.setFields();
+				gui_cultura_update.turnOnVisible();
+			}
+		});
+		
+		
 		JPanel medicoesPanel = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) medicoesPanel.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
@@ -160,7 +162,7 @@ public class GUI_Investigador {
 		
 		JPanel panel = new JPanel();
 		medicoesPanel.add(panel);
-		panel.setLayout(new GridLayout(3, 0, 2, 4));
+		panel.setLayout(new GridLayout(4, 0, 2, 4));
 		
 		JButton refreshBtn = new JButton("Refresh");
 		panel.add(refreshBtn);
@@ -197,6 +199,18 @@ public class GUI_Investigador {
 			}
 		});
 		
+		JButton updateMedicaoBtn = new JButton("Update");
+		panel.add(updateMedicaoBtn);
+		updateMedicaoBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_medicoes_update.resetVariavelBox();
+				gui_medicoes_update.setFields();
+				gui_medicoes_update.turnOnVisible();
+			}
+		});
+		
 		
 
 		
@@ -205,10 +219,8 @@ public class GUI_Investigador {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				int index = tabbedPane.getSelectedIndex();
-				System.out.println("Tab: " + tabbedPane.getSelectedIndex());
 				DefaultTableModel model;
 				String title = tabbedPane.getTitleAt(index);
-				System.out.println("Tab: " + title);
 				if(title.equals("Cultura")) {
 					model = investigador.getCulturaTable(culturaTable);
 					culturaTable.setModel(model);

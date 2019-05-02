@@ -11,8 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Administrador;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -38,8 +36,10 @@ public class GUI_Administrador {
 	private GUI_Sistema_Add gui_sistema;
 	private GUI_Utilizador_Add gui_utilizador;
 	private GUI_Utilizador_Delete gui_utilizador_delete;
+	private GUI_Utilizador_Update gui_utilizador_update;
 	private GUI_Variavel_Add gui_variavel;
 	private GUI_Variavel_Delete gui_variavel_delete;
+	
 
 
 	/**
@@ -50,6 +50,7 @@ public class GUI_Administrador {
 		this.gui_sistema = new GUI_Sistema_Add(admin);
 		this.gui_utilizador = new GUI_Utilizador_Add(admin);
 		this.gui_utilizador_delete = new GUI_Utilizador_Delete(admin);
+		this.gui_utilizador_update = new GUI_Utilizador_Update(admin);
 		this.gui_variavel = new GUI_Variavel_Add(admin);
 		this.gui_variavel_delete = new GUI_Variavel_Delete(admin);
 		initialize();
@@ -290,7 +291,7 @@ public class GUI_Administrador {
 		utilizadorPanel.add(scrollPaneUtilizador);
 		
 		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new GridLayout(3,1,4,4));
+		buttonsPanel.setLayout(new GridLayout(4,1,4,4));
 		utilizadorPanel.add(buttonsPanel);
 		
 		JButton refreshUtilizadorBtn = new JButton("Refresh");
@@ -311,6 +312,18 @@ public class GUI_Administrador {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				gui_utilizador.turnOnVisible();
+			}
+		});
+		
+		JButton updateUtilizadorBtn = new JButton("Update");
+		buttonsPanel.add(updateUtilizadorBtn);
+		updateUtilizadorBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_utilizador_update.resetUtilizadorBox();
+				gui_utilizador_update.setFields();
+				gui_utilizador_update.turnOnVisible();
 			}
 		});
 		
@@ -452,15 +465,12 @@ public class GUI_Administrador {
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
 				int index = tabbedPane.getSelectedIndex();
-				System.out.println("Tab: " + tabbedPane.getSelectedIndex());
 				DefaultTableModel model;
 				String title = tabbedPane.getTitleAt(index);
-				System.out.println("Tab: " + title);
 				if(title.equals("Cultura")) {
 					model = admin.getCulturaTable(culturaTable);
 					culturaTable.setModel(model);
 				} else if (title.equals("Medições")) {
-//					((DefaultTableModel)medicoesTable.getModel()).setRowCount(0);
 					model = admin.getMedicoesTable(medicoesTable);
 					medicoesTable.setModel(model);
 				} else if (title.equals("Medições Luminosidade")) {
@@ -474,7 +484,6 @@ public class GUI_Administrador {
 					utilizadorTable.setModel(model);
 				} else if (title.equals("Sistema")) {
 					model = admin.getSistemaTable(sistemaTable);
-//					((DefaultTableModel)sistemaTable.getModel()).setRowCount(0);
 					sistemaTable.setModel(model);
 				} else if (title.equals("Variaveis")) {
 					model = admin.getVariaveisTable(variaveisTable);
