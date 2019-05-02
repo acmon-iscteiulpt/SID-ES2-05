@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package InterfaceGrafica_Investigador;
 
 
 import javax.swing.JFrame;
@@ -20,12 +20,14 @@ public class GUI_Medicoes_Delete {
 	private JFrame frame;
 	private Investigador investigador;
 	private JComboBox<String> medicaoBox;
+	private GUI_Investigador gui_investigador;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Medicoes_Delete(Investigador investigador) {
+	public GUI_Medicoes_Delete(Investigador investigador, GUI_Investigador gui_investigador) {
+		this.gui_investigador = gui_investigador;
 		this.investigador = investigador;
 		initialize();
 	}
@@ -58,6 +60,7 @@ public class GUI_Medicoes_Delete {
 				String idMedicao = medicaoBox.getItemAt(index);
 				investigador.deleteMedicaoTable(idMedicao);
 				frame.setVisible(false);
+				gui_investigador.refreshMedicoes();
 			}
 		});
 	}

@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package InterfaceGrafica_Investigador;
 
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
@@ -21,13 +21,15 @@ public class GUI_Cultura_Add {
 	private JTextField culturaField;
 	private JTextField descricaoCulturaField;
 	private Investigador investigador;
+	private GUI_Investigador gui_investigador;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Cultura_Add(Investigador investigador) {
+	public GUI_Cultura_Add(Investigador investigador, GUI_Investigador gui_investigador) {
 		this.investigador = investigador;
+		this.gui_investigador = gui_investigador;
 		initialize();
 	}
 
@@ -79,6 +81,7 @@ public class GUI_Cultura_Add {
 				frame.setVisible(false);
 				culturaField.setText("");
 				descricaoCulturaField.setText("");
+				gui_investigador.refreshCultura();
 			}
 		});
 	}

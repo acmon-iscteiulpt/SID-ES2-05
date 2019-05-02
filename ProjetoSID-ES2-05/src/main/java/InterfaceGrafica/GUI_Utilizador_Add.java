@@ -26,18 +26,20 @@ public class GUI_Utilizador_Add {
 	private JTextField tipoUtilizadorField;
 	private JTextField emailField;
 	private JPasswordField passwordField;
+	private GUI_Administrador gui_admin;
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Utilizador_Add(Administrador admin) {
+	public GUI_Utilizador_Add(Administrador admin, GUI_Administrador gui_admin) {
+		this.gui_admin = gui_admin;
 		this.admin = admin;
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
-	 */
+	 */ 
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
@@ -106,6 +108,7 @@ public class GUI_Utilizador_Add {
 					admin.addUtilizador(nomeUtilizador, tipoUtilizador, email, password);
 					frame.setVisible(false);
 					resetFields();
+					gui_admin.refreshUtilizador();
 				}
 				
 			}

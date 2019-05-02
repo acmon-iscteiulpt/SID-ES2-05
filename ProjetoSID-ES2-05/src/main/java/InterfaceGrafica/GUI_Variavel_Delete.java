@@ -19,11 +19,13 @@ public class GUI_Variavel_Delete {
 	private JFrame frame;
 	private Administrador admin;
 	private JComboBox<String> variavelBox;
+	private GUI_Administrador gui_admin;
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Variavel_Delete(Administrador admin) {
+	public GUI_Variavel_Delete(Administrador admin, GUI_Administrador gui_admin) {
+		this.gui_admin = gui_admin;
 		this.admin = admin;
 		initialize();
 	}
@@ -56,6 +58,7 @@ public class GUI_Variavel_Delete {
 				String nomeVariavel = variavelBox.getItemAt(index);
 				admin.deleteVariavel(nomeVariavel);
 				frame.setVisible(false);
+				gui_admin.refreshVariavel();
 			}
 		});
 	}

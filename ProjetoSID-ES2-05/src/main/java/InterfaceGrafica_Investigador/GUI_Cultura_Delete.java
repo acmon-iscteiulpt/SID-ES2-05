@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package InterfaceGrafica_Investigador;
 
 import java.awt.EventQueue;
 
@@ -21,12 +21,14 @@ public class GUI_Cultura_Delete {
 	private JFrame frame;
 	private JTextField idCulturaField;
 	private Investigador investigador;
+	private GUI_Investigador gui_investigador;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Cultura_Delete(Investigador investigador) {
+	public GUI_Cultura_Delete(Investigador investigador, GUI_Investigador gui_investigador) {
+		this.gui_investigador = this.gui_investigador;
 		this.investigador = investigador;
 		initialize();
 	}
@@ -60,6 +62,7 @@ public class GUI_Cultura_Delete {
 				investigador.deleteCultura(idCultura);
 				frame.setVisible(false);
 				idCulturaField.setText("");
+				gui_investigador.refreshCultura();
 			}
 		});
 	}
