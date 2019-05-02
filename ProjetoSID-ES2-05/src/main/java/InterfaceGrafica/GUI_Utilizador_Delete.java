@@ -19,12 +19,14 @@ public class GUI_Utilizador_Delete {
 	private JFrame frame;
 	private Administrador admin;
 	private JComboBox<String> utilizadorBox;
+	private GUI_Administrador gui_admin;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Utilizador_Delete(Administrador admin) {
+	public GUI_Utilizador_Delete(Administrador admin, GUI_Administrador gui_admin) {
+		this.gui_admin = gui_admin;
 		this.admin = admin;
 		initialize();
 	}
@@ -57,6 +59,7 @@ public class GUI_Utilizador_Delete {
 				String nomeUtilizador = utilizadorBox.getItemAt(index);
 				admin.deleteUtilizador(nomeUtilizador);
 				frame.setVisible(false);
+				gui_admin.refreshUtilizador();
 			}
 		});
 	}

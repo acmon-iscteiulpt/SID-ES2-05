@@ -1,6 +1,4 @@
-package InterfaceGrafica;
-
-import java.awt.EventQueue;
+package InterfaceGrafica_Investigador;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
@@ -10,7 +8,6 @@ import com.toedter.calendar.JDateChooser;
 
 import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Investigador;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -41,11 +38,13 @@ public class GUI_Medicoes_Add {
 	private JComboBox<String> variavelBox;
 	private JSpinner spinner;
 	private Investigador investigador;
+	private GUI_Investigador gui_investigador;
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Medicoes_Add(Investigador investigador) {
+	public GUI_Medicoes_Add(Investigador investigador, GUI_Investigador gui_investigador) {
+		this.gui_investigador = gui_investigador;
 		this.investigador = investigador;
 		initialize();
 	}
@@ -133,6 +132,7 @@ public class GUI_Medicoes_Add {
 				String nomeVariavel = (String) variavelBox.getSelectedItem();
 				investigador.addMedicaoTable(nomeCultura, nomeVariavel, dataString, timeVector[3], valorMedicao);
 				frame.setVisible(false);
+				gui_investigador.refreshMedicoes();
 				
 			}
 		});

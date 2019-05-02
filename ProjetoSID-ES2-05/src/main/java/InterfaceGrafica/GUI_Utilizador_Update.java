@@ -29,11 +29,13 @@ public class GUI_Utilizador_Update {
 	private JPasswordField passwordField;
 	private JComboBox<String> utilizadorBox;
 	private Administrador admin;
+	private GUI_Administrador gui_admin;
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Utilizador_Update(Administrador admin) {
+	public GUI_Utilizador_Update(Administrador admin, GUI_Administrador gui_admin) {
+		this.gui_admin = gui_admin;
 		this.admin = admin;
 		initialize();
 	}
@@ -121,6 +123,7 @@ public class GUI_Utilizador_Update {
 				admin.updateUtilizador(nomeUtilizador, newNomeUtilizador, tipoUtilizador, email, password);
 				frame.setVisible(false);
 				resetFields();
+				gui_admin.refreshUtilizador();
 			}
 		});
 		

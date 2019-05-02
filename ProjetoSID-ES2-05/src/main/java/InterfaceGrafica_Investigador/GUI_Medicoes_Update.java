@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package InterfaceGrafica_Investigador;
 
 import javax.swing.JFrame;
 
@@ -30,11 +30,13 @@ public class GUI_Medicoes_Update {
 	private JComboBox<String> idMedicaoBox;
 	private JDateChooser dataChooser;
 	private JSpinner spinner;
-
+	private GUI_Investigador gui_investigador;
+	
 	/**
 	 * Create the application.
 	 */
-	public GUI_Medicoes_Update(Investigador investigador) {
+	public GUI_Medicoes_Update(Investigador investigador, GUI_Investigador gui_investigador) {
+		this.gui_investigador = gui_investigador;
 		this.investigador = investigador;
 		initialize();
 	}
@@ -110,6 +112,7 @@ public class GUI_Medicoes_Update {
 				// TODO Auto-generated method stub
 				frame.setVisible(false);
 				resetFields();
+				gui_investigador.refreshMedicoes();
 			}
 		});
 	}

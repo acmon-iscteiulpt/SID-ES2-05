@@ -27,12 +27,14 @@ public class GUI_Variavel_Add {
 	private JTextField limiteSuperiorField;
 	private JTextField limiteInferiorField;
 	private JComboBox<String> culturaBox;
+	private GUI_Administrador gui_admin;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Variavel_Add(Administrador admin) {
+	public GUI_Variavel_Add(Administrador admin, GUI_Administrador gui_admin) {
+		this.gui_admin = gui_admin;
 		this.admin = admin;
 		initialize();
 	}
@@ -107,6 +109,7 @@ public class GUI_Variavel_Add {
 					admin.addVariavel(cultura, nomeVariavel, limiteSuperior, limiteInferior);
 					frame.setVisible(false);
 					resetFields();
+					gui_admin.refreshVariavel();
 				} catch (Exception e2) {
 					// TODO: handle exception
 					JOptionPane.showMessageDialog(frame, "Preencha todos os campos!");

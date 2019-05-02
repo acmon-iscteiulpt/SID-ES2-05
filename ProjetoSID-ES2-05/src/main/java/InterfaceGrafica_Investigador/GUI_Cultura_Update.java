@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package InterfaceGrafica_Investigador;
 
 import javax.swing.JFrame;
 
@@ -24,11 +24,13 @@ public class GUI_Cultura_Update {
 	private JTextField nomeCulturaField;
 	private JTextField descricaoCulturaField;
 	private JComboBox<String> culturaBox;
+	private GUI_Investigador gui_investigador;
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Cultura_Update(Investigador investigador) {
+	public GUI_Cultura_Update(Investigador investigador, GUI_Investigador gui_investigador) {
+		this.gui_investigador = gui_investigador;
 		this.investigador = investigador;
 		initialize();
 	}
@@ -97,6 +99,7 @@ public class GUI_Cultura_Update {
 				investigador.updateCultura(nomeCultura, newNomeCultura, descricaoCultura);
 				frame.setVisible(false);
 				resetField();
+				gui_investigador.refreshCultura();
 			}
 		});
 	}

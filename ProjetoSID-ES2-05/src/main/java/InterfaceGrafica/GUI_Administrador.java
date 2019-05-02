@@ -48,11 +48,11 @@ public class GUI_Administrador {
 	public GUI_Administrador(Administrador admin) {
 		this.admin = admin;
 		this.gui_sistema = new GUI_Sistema_Add(admin);
-		this.gui_utilizador = new GUI_Utilizador_Add(admin);
-		this.gui_utilizador_delete = new GUI_Utilizador_Delete(admin);
-		this.gui_utilizador_update = new GUI_Utilizador_Update(admin);
-		this.gui_variavel = new GUI_Variavel_Add(admin);
-		this.gui_variavel_delete = new GUI_Variavel_Delete(admin);
+		this.gui_utilizador = new GUI_Utilizador_Add(admin, this);
+		this.gui_utilizador_delete = new GUI_Utilizador_Delete(admin, this);
+		this.gui_utilizador_update = new GUI_Utilizador_Update(admin, this);
+		this.gui_variavel = new GUI_Variavel_Add(admin, this);
+		this.gui_variavel_delete = new GUI_Variavel_Delete(admin, this);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -300,8 +300,7 @@ public class GUI_Administrador {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				DefaultTableModel model = admin.getUtilizadorTable(utilizadorTable);
-				utilizadorTable.setModel(model);
+				refreshUtilizador();
 			}
 		});
 		
@@ -381,8 +380,7 @@ public class GUI_Administrador {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				DefaultTableModel model = admin.getVariaveisTable(variaveisTable);
-				variaveisTable.setModel(model);
+				refreshVariavel();
 			}
 		});
 		
@@ -447,18 +445,6 @@ public class GUI_Administrador {
 		variaveisMedidasPanel.add(scrollPaneVariaveisMedidas);
 		
 		
-		//Configuração do Tab Alertas Sensor
-		JPanel alertasSensorPanel = new JPanel();
-		tabbedPane.addTab("Alertas Sensor", null, alertasSensorPanel, null);
-		
-		table_1 = new JTable();
-		alertasSensorPanel.add(table_1);
-		
-		JPanel alertasMedicoesPanel = new JPanel();
-		tabbedPane.addTab("Alertas Medições", null, alertasMedicoesPanel, null);
-		
-		table = new JTable();
-		alertasMedicoesPanel.add(table);
 		
 		tabbedPane.getModel().addChangeListener(new ChangeListener() {
 
@@ -499,6 +485,16 @@ public class GUI_Administrador {
 		});
 		
 
+	}
+	
+	public void refreshVariavel() {
+		DefaultTableModel model = admin.getVariaveisTable(variaveisTable);
+		variaveisTable.setModel(model);
+	}
+	
+	public void refreshUtilizador() {
+		DefaultTableModel model = admin.getUtilizadorTable(utilizadorTable);
+		utilizadorTable.setModel(model);
 	}
 
 }

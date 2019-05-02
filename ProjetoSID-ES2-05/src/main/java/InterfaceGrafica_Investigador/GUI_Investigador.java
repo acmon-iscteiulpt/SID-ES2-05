@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package InterfaceGrafica_Investigador;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,12 +38,12 @@ public class GUI_Investigador {
 	 */
 	public GUI_Investigador(Investigador investigador) {
 		this.investigador = investigador;
-		this.gui_cultura = new GUI_Cultura_Add(investigador);
-		this.gui_cultura_delete = new GUI_Cultura_Delete(investigador);
-		this.gui_cultura_update = new GUI_Cultura_Update(investigador);
-		this.gui_medicoes = new GUI_Medicoes_Add(investigador);
-		this.gui_medicoes_delete = new GUI_Medicoes_Delete(investigador);
-		this.gui_medicoes_update = new GUI_Medicoes_Update(investigador);
+		this.gui_cultura = new GUI_Cultura_Add(investigador, this);
+		this.gui_cultura_delete = new GUI_Cultura_Delete(investigador, this);
+		this.gui_cultura_update = new GUI_Cultura_Update(investigador, this);
+		this.gui_medicoes = new GUI_Medicoes_Add(investigador, this);
+		this.gui_medicoes_delete = new GUI_Medicoes_Delete(investigador, this);
+		this.gui_medicoes_update = new GUI_Medicoes_Update(investigador, this);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -53,7 +53,7 @@ public class GUI_Investigador {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 600, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
@@ -116,8 +116,7 @@ public class GUI_Investigador {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				DefaultTableModel model = investigador.getCulturaTable(culturaTable);
-				culturaTable.setModel(model);
+				refreshCultura();
 			}
 		});
 		
@@ -170,8 +169,7 @@ public class GUI_Investigador {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				DefaultTableModel model = investigador.getMedicaoTable(medicoesTable);
-				medicoesTable.setModel(model);
+				refreshMedicoes();
 			}
 		});
 		
@@ -230,6 +228,17 @@ public class GUI_Investigador {
 				}
 			}
 		});
+		refreshCultura();
+	}
+	
+	public void refreshCultura() {
+		DefaultTableModel model = investigador.getCulturaTable(culturaTable);
+		culturaTable.setModel(model);
+	}
+	
+	public void refreshMedicoes() {
+		DefaultTableModel model = investigador.getMedicaoTable(medicoesTable);
+		medicoesTable.setModel(model);
 	}
 
 }

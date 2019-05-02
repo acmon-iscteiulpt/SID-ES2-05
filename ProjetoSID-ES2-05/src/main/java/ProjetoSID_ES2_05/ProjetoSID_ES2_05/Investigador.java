@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import InterfaceGrafica.GUI_Investigador;
+import InterfaceGrafica_Investigador.GUI_Investigador;
 
 public class Investigador {
 	
