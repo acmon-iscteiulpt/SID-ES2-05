@@ -1,6 +1,5 @@
 package InterfaceGrafica;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
@@ -17,10 +16,9 @@ import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Administrador;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.JPanel;
-import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 
-public class GUI_Utilizador {
+public class GUI_Utilizador_Add {
 
 	private JFrame frame;
 	private Administrador admin;
@@ -28,26 +26,11 @@ public class GUI_Utilizador {
 	private JTextField tipoUtilizadorField;
 	private JTextField emailField;
 	private JPasswordField passwordField;
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					GUI_Utilizador window = new GUI_Utilizador();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Utilizador(Administrador admin) {
+	public GUI_Utilizador_Add(Administrador admin) {
 		this.admin = admin;
 		initialize();
 	}
@@ -58,7 +41,7 @@ public class GUI_Utilizador {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JSplitPane splitPane = new JSplitPane();
@@ -122,11 +105,18 @@ public class GUI_Utilizador {
 				} else {
 					admin.addUtilizador(nomeUtilizador, tipoUtilizador, email, password);
 					frame.setVisible(false);
+					resetFields();
 				}
 				
 			}
 		});
 		
+	}
+	
+	public void resetFields() {
+		nomeUtilizadorField.setText("");
+		tipoUtilizadorField.setText("");
+		passwordField.setText("");
 	}
 	
 	public void turnOnVisible() {

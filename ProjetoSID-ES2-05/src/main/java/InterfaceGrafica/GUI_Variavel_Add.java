@@ -1,6 +1,5 @@
 package InterfaceGrafica;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.GridLayout;
@@ -10,22 +9,17 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Administrador;
 
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.AbstractListModel;
-import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-public class GUI_Variavel {
+public class GUI_Variavel_Add {
 
 	private JFrame frame;
 	private Administrador admin;
@@ -34,26 +28,11 @@ public class GUI_Variavel {
 	private JTextField limiteInferiorField;
 	private JComboBox<String> culturaBox;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					GUI_Variavel window = new GUI_Variavel();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the application.
 	 */
-	public GUI_Variavel(Administrador admin) {
+	public GUI_Variavel_Add(Administrador admin) {
 		this.admin = admin;
 		initialize();
 	}
@@ -127,6 +106,7 @@ public class GUI_Variavel {
 					System.out.println("Cultura seleccionada: " + cultura);
 					admin.addVariavel(cultura, nomeVariavel, limiteSuperior, limiteInferior);
 					frame.setVisible(false);
+					resetFields();
 				} catch (Exception e2) {
 					// TODO: handle exception
 					JOptionPane.showMessageDialog(frame, "Preencha todos os campos!");
@@ -134,6 +114,12 @@ public class GUI_Variavel {
 				
 			}
 		});
+	}
+	
+	public void resetFields() {
+		nomeVariavelField.setText("");
+		limiteSuperiorField.setText("");
+		limiteInferiorField.setText("");
 	}
 	
 	public void turnOnVisible() {

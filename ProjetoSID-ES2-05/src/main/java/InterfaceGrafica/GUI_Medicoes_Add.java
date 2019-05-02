@@ -32,7 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
-public class GUI_Medicoes {
+public class GUI_Medicoes_Add {
 
 	private JFrame frame;
 	private JDateChooser dataChooser;
@@ -43,25 +43,9 @@ public class GUI_Medicoes {
 	private Investigador investigador;
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					GUI_Medicoes window = new GUI_Medicoes();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	/**
 	 * Create the application.
 	 */
-	public GUI_Medicoes(Investigador investigador) {
+	public GUI_Medicoes_Add(Investigador investigador) {
 		this.investigador = investigador;
 		initialize();
 	}

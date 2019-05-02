@@ -229,10 +229,58 @@ public class Investigador {
 		}
 	}
 	
+	public String[] searchCultura(String nomeCultura) {
+		try {
+			String[] v = new String[1];
+			Statement stmt = conn.createStatement();
+			String querySelect = "SELECT * FROM cultura WHERE NomeCultura=" + "\"" + nomeCultura + "\";";
+			ResultSet rs = stmt.executeQuery(querySelect);
+			rs.next();
+			v[0] = rs.getString("DescricaoCultura");
+			return v;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
+	
+	public void updateCultura(String nomeCultura, String newNomeCultura, String descricaoCultura) {
+		System.out.println("UpdateCultura");
+	}
+	
+	public String[] searchMedicao(String idMedicao) {
+		try {
+			String[] v = new String[3];
+			Statement stmt = conn.createStatement();
+			String querySelect = "SELECT * FROM medicoes WHERE IDMedicoes=" + "\"" + idMedicao + "\";";
+			String dataHoraMedicao;
+			String[] dataHoraMedicaoV;
+			ResultSet rs = stmt.executeQuery(querySelect);
+			rs.next();
+			dataHoraMedicao = rs.getString("DataHoraMedicao");
+			dataHoraMedicaoV = dataHoraMedicao.split(" ");
+			v[0] = dataHoraMedicaoV[0];
+			v[1] = dataHoraMedicaoV[1];
+			v[2] = rs.getString("ValorMedicao");
+			return v;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
+	
+	public void updateMedicao(String idMedicao, String data, String hora, String valorMedicao) {
+		System.out.println("Update Medicao");
+	}
+	
 	
 	
 	public static void main(String[] args) {
 		new Investigador("root", "teste123");
 	}
+
+
 
 }
