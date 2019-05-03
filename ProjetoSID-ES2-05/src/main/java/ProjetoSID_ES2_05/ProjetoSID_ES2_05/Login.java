@@ -61,7 +61,7 @@ public class Login {
 	//Está-se a usar as credenciais do root para poder aceder a tabela de utilizadores
 	public void typeOfUser(String username, String password) throws SQLException {
 		Connection conn = null;
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/"+nomeBaseDados, "root", "teste123");
+		conn = DriverManager.getConnection("jdbc:mysql://localhost/"+nomeBaseDados, username, password);
 		Statement stmt = conn.createStatement();
 		String querySelectTypeOfUser = "SELECT TipoUtilizador FROM utilizador WHERE NomeUtilizador=\"" + username + "\";";
 		System.out.println("Query: " + querySelectTypeOfUser);
