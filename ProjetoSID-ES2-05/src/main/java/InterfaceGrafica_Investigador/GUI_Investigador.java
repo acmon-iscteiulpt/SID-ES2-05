@@ -30,7 +30,11 @@ public class GUI_Investigador {
 	private GUI_Medicoes_Add gui_medicoes;
 	private GUI_Medicoes_Delete gui_medicoes_delete;
 	private GUI_Medicoes_Update gui_medicoes_update;
+	private GUI_VariaveisMedidas_Add gui_variaveismedidas_add;
+	private GUI_VariaveisMedidas_Update gui_variaveismedidas_update;
+	private GUI_VariaveisMedidas_Delete gui_variaveismedidas_delete;
 	private JTable medicoesTable;
+	private JTable variaveisMedidasTable;
 
 
 	/**
@@ -44,6 +48,9 @@ public class GUI_Investigador {
 		this.gui_medicoes = new GUI_Medicoes_Add(investigador, this);
 		this.gui_medicoes_delete = new GUI_Medicoes_Delete(investigador, this);
 		this.gui_medicoes_update = new GUI_Medicoes_Update(investigador, this);
+		this.gui_variaveismedidas_add = new GUI_VariaveisMedidas_Add(investigador, this);
+		this.gui_variaveismedidas_update = new GUI_VariaveisMedidas_Update(investigador, this);
+		this.gui_variaveismedidas_delete = new GUI_VariaveisMedidas_Delete(this, investigador);
 		initialize();
 		frame.setVisible(true);
 	}
@@ -209,6 +216,70 @@ public class GUI_Investigador {
 			}
 		});
 		
+		JPanel variaveisMedidasPane = new JPanel();
+		FlowLayout flowLayout_2 = (FlowLayout) variaveisMedidasPane.getLayout();
+		flowLayout_2.setAlignment(FlowLayout.LEFT);
+		tabbedPane.addTab("VariaveisMedidas", null, variaveisMedidasPane, null);
+		
+		variaveisMedidasTable = new JTable();
+		variaveisMedidasTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"VariaveisMedidas_ID", "IDCultura_FK", "IDVariavel_FK", "LimiteSuperior", "LimiteInferior"
+			}
+		));
+		JScrollPane scrollPane1 = new JScrollPane(variaveisMedidasTable);
+		variaveisMedidasPane.add(scrollPane1);
+		
+		JPanel panel3 = new JPanel();
+		panel3.setLayout(new GridLayout(4, 0, 2, 4));
+		JButton addVariavelMedida = new JButton("Add");
+		JButton refreshVariavelMedida = new JButton("Refresh");
+		JButton deleteVariavelMedida = new JButton("Delete");
+		JButton updateVariavelMedida = new JButton("Update");
+		panel3.add(refreshVariavelMedida);
+		panel3.add(addVariavelMedida);
+		panel3.add(deleteVariavelMedida);
+		panel3.add(updateVariavelMedida);
+		variaveisMedidasPane.add(panel3);
+		
+		addVariavelMedida.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_variaveismedidas_add.resetCulturaBox();
+				gui_variaveismedidas_add.resetVariavelBox();
+				gui_variaveismedidas_add.turnOnVisible();
+			}
+		});
+		
+		refreshVariavelMedida.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				refreshVariaveisMedidas();
+			}
+		});
+		
+		updateVariavelMedida.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_variaveismedidas_update.resetIdMedicaoBox();
+				gui_variaveismedidas_update.setFields();
+				gui_variaveismedidas_update.turnOnVisible();
+			}
+		});
+		
+		deleteVariavelMedida.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gui_variaveismedidas_delete.resetIdVariavelMedidaBox();
+				gui_variaveismedidas_delete.turnOnVisible();
+			}
+		});
 		
 
 		
@@ -220,11 +291,11 @@ public class GUI_Investigador {
 				DefaultTableModel model;
 				String title = tabbedPane.getTitleAt(index);
 				if(title.equals("Cultura")) {
-					model = investigador.getCulturaTable(culturaTable);
-					culturaTable.setModel(model);
+					refreshCultura();
 				} else if (title.equals("Medições")) {
-					model = investigador.getMedicaoTable(medicoesTable);
-					medicoesTable.setModel(model);
+					refreshMedicoes();
+				} else if (title.equals("VariaveisMedidas")) {
+					refreshVariaveisMedidas();
 				}
 			}
 		});
@@ -241,4 +312,8 @@ public class GUI_Investigador {
 		medicoesTable.setModel(model);
 	}
 
+	public void refreshVariaveisMedidas() {
+		DefaultTableModel model = investigador.getVariaveisMedidasTable(variaveisMedidasTable);
+		variaveisMedidasTable.setModel(model);
+	}
 }

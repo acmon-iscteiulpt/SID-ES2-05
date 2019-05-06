@@ -78,9 +78,6 @@ public class Investigador {
 	
 	public DefaultTableModel getCulturaTable(JTable table) {
 		try {
-//			Statement stmt = conn.createStatement();
-//			String querySelectCultura = "SELECT * FROM cultura";
-//			System.out.println("Query: " + querySelectCultura);
 			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
@@ -106,9 +103,6 @@ public class Investigador {
 	
 	public DefaultTableModel getMedicaoTable(JTable table) {
 		try {
-//			Statement stmt = conn.createStatement();
-//			String querySelectCultura = "SELECT * FROM cultura";
-//			System.out.println("Query: " + querySelectCultura);
 			CallableStatement cStmt = conn.prepareCall("{call mostra_medicoes_utilizador()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
@@ -134,6 +128,54 @@ public class Investigador {
 		return null;
 	}
 	
+	public DefaultTableModel getVariaveisMedidasTable(JTable table) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call mostra_variaveismedidas_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			((DefaultTableModel)table.getModel()).setRowCount(0);
+			DefaultTableModel model = (DefaultTableModel)table.getModel();
+			Object [] row = new Object[5];
+			while(rs.next()) {
+				row[0] = rs.getString("VariaveisMedidas_ID");
+				row[1] = rs.getString("IDCultura_fk");
+				row[2] = rs.getString("IDVariavel_fk");
+				row[3] = rs.getString("LimiteSuperior");
+				row[4] = rs.getString("LimiteInferior");
+				model.addRow(row);
+			}
+			rs.close();
+			cStmt.close();
+			return model;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public DefaultComboBoxModel<String> getIDVariaveisMedidasTable() {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call mostra_variaveismedidas_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			String idMedicao;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				idMedicao = rs.getString("VariaveisMedidas_ID");
+				box.addElement(idMedicao);
+			}
+			rs.close();
+			cStmt.close();
+			return box;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	public DefaultComboBoxModel<String> getNomeCultura() {
 		try {
 			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
@@ -157,9 +199,6 @@ public class Investigador {
 	
 	public DefaultComboBoxModel<String> getNomeVariavel() {
 		try {
-//			CallableStatement cStmt = conn.prepareCall("{call mostra_variavel_utilizador()}");
-//			cStmt.execute();
-//			ResultSet rs = cStmt.getResultSet();
 			String querySelectVariavel = "SELECT * FROM variavel";
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(querySelectVariavel);
@@ -179,9 +218,6 @@ public class Investigador {
 	
 	public DefaultComboBoxModel<String> getID_MedicaoTable() {
 		try {
-//			Statement stmt = conn.createStatement();
-//			String querySelectCultura = "SELECT * FROM cultura";
-//			System.out.println("Query: " + querySelectCultura);
 			CallableStatement cStmt = conn.prepareCall("{call mostra_medicoes_utilizador()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
@@ -244,10 +280,7 @@ public class Investigador {
 		
 		return null;
 	}
-	
-	public void updateCultura(String nomeCultura, String newNomeCultura, String descricaoCultura) {
-		System.out.println("UpdateCultura");
-	}
+
 	
 	public String[] searchMedicao(String idMedicao) {
 		try {
@@ -271,11 +304,70 @@ public class Investigador {
 		return null;
 	}
 	
+	public String[] searchVariavelMedida(String idVariavelMedida) {
+		try {
+			String[] v = new String[2];
+			Statement stmt = conn.createStatement();
+			String querySelect = "SELECT * FROM variaveismedidas WHERE VariaveisMedidas_ID=" + "\"" + idVariavelMedida + "\";";
+			ResultSet rs = stmt.executeQuery(querySelect);
+			rs.next();
+			v[0] = rs.getString("LimiteSuperior");
+			v[1] = rs.getString("LimiteInferior");
+			return v;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+	}
+	
 	public void updateMedicao(String idMedicao, String data, String hora, String valorMedicao) {
 		System.out.println("Update Medicao");
 	}
 	
+	public void updateCultura(String nomeCultura, String newNomeCultura, String descricaoCultura) {
+		System.out.println("UpdateCultura");
+	}
 	
+	public void updateVariavelMedida(String idVariavelMedida, int limiteSuperior, int limiteInferior) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call alterar_variaveis_medidas(?, ?, ?)}");
+			int idMedicao2 = Integer.parseInt(idVariavelMedida);
+			cStmt.setLong(1, idMedicao2);
+			cStmt.setLong(2, limiteSuperior);
+			cStmt.setLong(3, limiteInferior);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void deleteVariavelMedida(String idVariavelMedida) {
+		try {
+			int id = Integer.parseInt(idVariavelMedida);
+			String queryDelete = "DELETE FROM variaveismedidas WHERE VariaveisMedidas_ID=" + idVariavelMedida + ";";
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate(queryDelete);
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "ID tem que ser um valor numérico!");
+		}
+	}
+	
+	public void addVariavelMedida(String nomeCultura, String nomeVariavel, int limiteSuperior, int limiteInferior) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call insere_variaveismedidas(?, ?, ?, ?)}");
+			cStmt.setString(1, nomeCultura);
+			cStmt.setString(2, nomeVariavel);
+			cStmt.setLong(3, limiteSuperior);
+			cStmt.setLong(4, limiteInferior);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 	
 	public static void main(String[] args) {
 		new Investigador("root", "teste123");
