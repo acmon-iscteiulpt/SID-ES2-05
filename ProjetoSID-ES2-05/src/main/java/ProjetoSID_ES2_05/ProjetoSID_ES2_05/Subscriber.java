@@ -12,6 +12,7 @@ public class Subscriber extends Cliente {
 
 	private static final String bd = "bd_dados_sensores";
 	private static final String collection = "collection_dados_sensores";
+	private static final String topic = "/sid_lab_2019";
 	private static final int discrepanciaTemperatura = 10;
 	private static final int discrepanciaLuminosidade = 10;
 	
@@ -38,7 +39,7 @@ public class Subscriber extends Cliente {
 	@Override
 	public void subscribe() {
 		try {
-			super.getClient().subscribe("iscte_sid_grupo_05", 2);
+			super.getClient().subscribe(topic, 2);
 		} catch (MqttException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Ocorreu um erro no subscribe da class Mongo");

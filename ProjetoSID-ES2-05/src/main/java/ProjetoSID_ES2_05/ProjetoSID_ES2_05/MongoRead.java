@@ -20,9 +20,6 @@ import org.json.JSONObject;
 
 public class MongoRead  {
 
-	private static final String bd = "Dados_sensoresBD";
-	private static final String collection = "dados_luminosidade";
-
 	private Connection conn;
 	private MongoClient mongoClient;
 	private DB db;
