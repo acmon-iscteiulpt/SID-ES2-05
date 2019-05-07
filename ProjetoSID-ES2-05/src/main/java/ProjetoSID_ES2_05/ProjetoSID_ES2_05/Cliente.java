@@ -4,13 +4,12 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public abstract class Cliente implements MqttCallback{
 	
-	private static final String broker = "tcp://iot.eclipse.org:1883";
-	protected static final int qos = 2;
+	private static final String broker = "tcp://broker.mqtt-dashboard.com:1883";
 	
 	private String clientID;
 	private MqttClient client;
@@ -24,8 +23,7 @@ public abstract class Cliente implements MqttCallback{
 	
 	protected void initialize() {
 		try {
-			MemoryPersistence persistence = new MemoryPersistence();
-			client = new MqttClient(broker, clientID, persistence);
+			client = new MqttClient(broker, clientID);
 			client.setCallback(this);
 			connOpts = new MqttConnectOptions();
 			connOpts.setAutomaticReconnect(true);
@@ -65,8 +63,14 @@ public abstract class Cliente implements MqttCallback{
 		
 	}
 	
-	public void subscribe() {
-		
+	public void subscribe(String topic) {
+		try {
+			client.subscribe(topic);
+		} catch (MqttException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Não foi possível subcrever o topico");
+			e.printStackTrace();
+		}
 	}
 
 	public void connectionLost(Throwable cause) {

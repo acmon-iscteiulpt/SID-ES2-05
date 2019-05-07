@@ -4,7 +4,9 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class Sensor extends Cliente {
-
+	
+	private static final String topic = "/sid_lab_2019";
+	
 	public Sensor(String clientID) {
 		super(clientID);
 		// TODO Auto-generated constructor stub
@@ -21,9 +23,8 @@ public class Sensor extends Cliente {
 	public void sendValues(String json) {
 		if(!super.getClient().isConnected())
 			super.connectToServer();
-		String topic = "iscte_sid_grupo_05";
 		MqttMessage message1 = new MqttMessage(json.getBytes());
-		message1.setQos(super.qos);
+//		message1.setQos(super.qos);
 		try {
 			super.getClient().publish(topic, message1);
 		} catch (Exception e) {

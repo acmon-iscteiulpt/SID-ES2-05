@@ -4,18 +4,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.json.JSONObject;
 
-public class Subscriber extends Cliente {
+public class Subscriber implements MqttCallback {
 
 	private static final String bd = "bd_dados_sensores";
 	private static final String collection = "collection_dados_sensores";
-	private static final String topic = "/sid_lab_2019";
+	private static final String broker = "tcp://broker.mqtt-dashboard.com:1883";
+	private static final String topic = "/sid_lab_2019_2";
 	private static final int discrepanciaTemperatura = 10;
 	private static final int discrepanciaLuminosidade = 10;
 	
+	private MqttClient client;
+	private MqttConnectOptions connOpts;
 	private MongoWrite mw;
 	private MongoRead mr;
 	private boolean primeiroDadoTemperaturaRecebido = false;
@@ -30,27 +36,66 @@ public class Subscriber extends Cliente {
 	private double percentagemTemperatura;
 
 	public Subscriber(String clientID) {
-		super(clientID);
-		subscribe();
-		this.mw = new MongoWrite(bd, collection);
-		this.mr = new MongoRead(bd, collection);
+//		super(clientID);
+		try {
+			initialize();
+			connectToServer();
+			client.subscribe(topic);
+			this.mw = new MongoWrite(bd, collection);
+			this.mr = new MongoRead(bd, collection);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro na construcao do objeto subscriber");
+			e.printStackTrace();
+		}
+		
 	}
 
-	@Override
-	public void subscribe() {
+	
+	public void initialize() {
 		try {
-			super.getClient().subscribe(topic, 2);
-		} catch (MqttException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Ocorreu um erro no subscribe da class Mongo");
+			client = new MqttClient(broker, "1");
+			client.setCallback(this);
+			connOpts = new MqttConnectOptions();
+			connOpts.setAutomaticReconnect(true);
+			connOpts.setCleanSession(true);
+			connOpts.setConnectionTimeout(10);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void connectToServer() {
+		try {
+			System.out.println("Connecting to broker: " + broker);
+			client.connect(connOpts);
+			System.out.println("Connected");
+		} catch (Exception e) {
+			System.out.println("Catch método connectToServer");
 			e.printStackTrace();
 		}
 	}
 
-	@Override
+	public void connectionLost(Throwable cause) {
+		// TODO Auto-generated method stub
+		System.out.println("Connection Lost!");
+		System.out.println(cause.toString());
+		connectToServer();
+		if(client.isConnected()) {
+			System.out.println("Cliente está novamente connectado!");
+		}
+	}
+
+	public void deliveryComplete(IMqttDeliveryToken token) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Chegou ao topico" + topic + " a seguinte mensagem:  " + message.toString());
+		String json = message.toString().replace("\"\"", "\",\"");
+		System.out.println("JSON CORRETO: " + json);
 		// tornar a mensagem recebida num json object para em baixo verificar quais
 		// campos exeitem nesse json
 		JSONObject jsonObj = new JSONObject(message.toString());
@@ -224,5 +269,7 @@ public class Subscriber extends Cliente {
 	public static void main(String[] args) {
 		new Subscriber("1");
 	}
+
+
 
 }
