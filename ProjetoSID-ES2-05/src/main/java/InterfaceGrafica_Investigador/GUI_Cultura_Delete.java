@@ -28,7 +28,7 @@ public class GUI_Cultura_Delete {
 	 * Create the application.
 	 */
 	public GUI_Cultura_Delete(Investigador investigador, GUI_Investigador gui_investigador) {
-		this.gui_investigador = this.gui_investigador;
+		this.gui_investigador = gui_investigador;
 		this.investigador = investigador;
 		initialize();
 	}

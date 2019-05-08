@@ -55,7 +55,7 @@ public class GUI_Medicoes_Add {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JSplitPane splitPane = new JSplitPane();
@@ -137,6 +137,10 @@ public class GUI_Medicoes_Add {
 			}
 		});
 		splitPane.setRightComponent(addBtn);
+	}
+	
+	public void resetFields() {
+		valorMedicaoField.setText("");
 	}
 	
 	public void turnOnVisible() {

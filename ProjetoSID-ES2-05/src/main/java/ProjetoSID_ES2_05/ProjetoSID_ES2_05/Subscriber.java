@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -40,6 +41,7 @@ public class Subscriber implements MqttCallback {
 	private static final int discrepanciaTemperatura = 10;
 	private static final int discrepanciaLuminosidade = 10;
 	
+	private Authenticator auth;
 	private Connection conn;
 	private MqttClient client;
 	private MqttConnectOptions connOpts;
@@ -65,6 +67,7 @@ public class Subscriber implements MqttCallback {
 
 	public Subscriber() {
 		try {
+			autenticarCliente();
 			connectToMainBase();
 			setLimites();
 			initialize();
@@ -472,7 +475,7 @@ public class Subscriber implements MqttCallback {
 		System.out.println("As notificações foram mandadas");
 	}
 	
-	//Falta definir
+	
 	public void enviarEmail(String emailTo, String assunto, String mensagem) {
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -480,12 +483,7 @@ public class Subscriber implements MqttCallback {
         prop.put("mail.smtp.auth", "true");
         prop.put("mail.smtp.starttls.enable", "true"); //TLS
         
-        Session session = Session.getInstance(prop,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
+        Session session = Session.getInstance(prop, auth);
 
         try {
 
@@ -538,11 +536,14 @@ public class Subscriber implements MqttCallback {
 		}
 	}
 	
-	public void showEmails() {
-		for(String s: emails) {
-			System.out.println("Email: " + s);
-		}
+	public void autenticarCliente() {
+		auth = new Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			} 
+		};
 	}
+	
 	
 	public void setLimites() {
 		try {

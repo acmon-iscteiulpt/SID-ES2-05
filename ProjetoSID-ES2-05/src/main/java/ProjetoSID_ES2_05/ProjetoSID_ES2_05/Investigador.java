@@ -17,11 +17,12 @@ import InterfaceGrafica_Investigador.GUI_Investigador;
 
 public class Investigador {
 	
+	private static final String ip = "5.249.51.0:3306";
+	
 	private Connection conn;
 
 	
 	public Investigador(String username, String password) {
-//		this.username = username;
 		connectToMainBase(username, password);
 		new GUI_Investigador(this);
 		
@@ -30,7 +31,7 @@ public class Investigador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + ip + "/nossabd_origem", username, password);
 			System.out.println("Investigador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Investigador não se conseguiu conectar a base de dados MySQL!");
@@ -240,7 +241,7 @@ public class Investigador {
 	//SP ainda nao funciona
 	public void addMedicaoTable(String nomeCultura,String nomeVariavel ,String data, String time, String valorMedicao) {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call inserir_medicao(?, ?, ?, ?)}");
+			CallableStatement cStmt = conn.prepareCall("{call insere_medicoes(?, ?, ?, ?)}");
 			String dataHora = data + " " + time;
 			cStmt.setString(1, nomeCultura);
 			cStmt.setString(2, nomeVariavel);
