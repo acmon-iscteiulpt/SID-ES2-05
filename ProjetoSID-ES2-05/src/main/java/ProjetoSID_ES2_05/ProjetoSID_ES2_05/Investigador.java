@@ -18,10 +18,10 @@ import InterfaceGrafica_Investigador.GUI_Investigador;
 public class Investigador {
 	
 	private Connection conn;
-	private String username;
+
 	
 	public Investigador(String username, String password) {
-		this.username = username;
+//		this.username = username;
 		connectToMainBase(username, password);
 		new GUI_Investigador(this);
 		
