@@ -6,7 +6,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,9 +26,13 @@ import InterfaceGrafica_Investigador.GUI_Investigador;
 
 public class Investigador {
 	
+	private static final String username = "engenheiroses1@gmail.com";
+	private static final String password = "omiaoegay";
 	private static final String ip = "5.249.51.0:3306";
+	private static final String localhost = "localhost";
 	
 	private Connection conn;
+	private Authenticator auth;
 
 	
 	public Investigador(String username, String password) {
@@ -31,7 +44,7 @@ public class Investigador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + ip + "/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + localhost + "/nossabd_origem", username, password);
 			System.out.println("Investigador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Investigador não se conseguiu conectar a base de dados MySQL!");
@@ -198,6 +211,27 @@ public class Investigador {
 		return null;
 	}
 	
+	public DefaultComboBoxModel<String> getIDCultura() {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			String nomeCultura;
+			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
+			while(rs.next()) {
+				nomeCultura = rs.getString("IDCultura");
+				box.addElement(nomeCultura);
+			}
+			cStmt.close();
+			return box;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao procurar pelo ID das culturas");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public DefaultComboBoxModel<String> getNomeVariavel() {
 		try {
 			String querySelectVariavel = "SELECT * FROM variavel";
@@ -252,6 +286,56 @@ public class Investigador {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	public void verificarMedicao(String nomeCultura, String nomeVariavel, String valorMedicao) {
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call medicao_ultrapassou(?,?,?)}");
+			cStmt.setString(1, nomeCultura);
+			cStmt.setString(2, nomeVariavel);
+			cStmt.setString(3, valorMedicao);
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			rs.next();
+			String mensagem = rs.getString("mensagem");
+			verificarMensagem(mensagem, nomeCultura, nomeVariavel, valorMedicao);
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao correr o sp medicao_ultrapassou");
+		}
+	}
+	
+	public void verificarMensagem(String mensagem, String nomeCultura, String nomeVariavel, String valorMedicao) {
+		if(!mensagem.isEmpty()) {
+			notificar(mensagem, nomeCultura, nomeVariavel, valorMedicao);
+		} else {
+			System.out.println("Conteudo mensagem (verificarMensagem - Classe Investigador): " + mensagem);
+		}
+	}
+	
+	public void notificar(String mensagem, String nomeCultura, String nomeVariavel, String valorMedicao) {
+		String email = getEmail(nomeCultura);
+		enviarEmail(email, mensagem, "O valor da medição " + nomeVariavel + " foi: " + valorMedicao);
+		
+	}
+
+	
+	public String getEmail(String nomeCultura) {
+		String email = new String();
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call getEmail_NomeCultura(?)}");
+			cStmt.setString(1, nomeCultura);
+			cStmt.execute();
+			ResultSet rs = cStmt.getResultSet();
+			rs.next();
+			email = rs.getString("Email");
+			return email;
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao correr o sp --> getEmail_NomeCultura");
+		}
+		return email;
 	}
 	
 	public void deleteMedicaoTable(String idMedicao) {
@@ -368,6 +452,43 @@ public class Investigador {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	public void autenticarCliente() {
+		auth = new Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			} 
+		};
+	}
+	
+	public void enviarEmail(String emailTo, String assunto, String mensagem) {
+		Properties prop = new Properties();
+		prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        
+        Session session = Session.getInstance(prop, auth);
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("engenheiroses1@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(emailTo)
+            );
+            message.setSubject(assunto);
+            message.setText(mensagem);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public static void main(String[] args) {

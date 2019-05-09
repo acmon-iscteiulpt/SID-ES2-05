@@ -101,16 +101,17 @@ public class GUI_VariaveisMedidas_Update {
 					String idMedicao = (String) idVariavelMedidaBox.getSelectedItem();
 					String limiteSuperior = limiteSuperiorField.getText();
 					String limiteInferior = limiteInferiorField.getText();
-					int limiteSuperior2 = Integer.parseInt(limiteSuperior);
-					int limiteInferior2 = Integer.parseInt(limiteInferior);
+					double limiteSuperior2 = Double.parseDouble(limiteSuperior);
+					double limiteInferior2 = Double.parseDouble(limiteInferior);
 					System.out.println("LimiteSuperior: " + limiteSuperior2);
 					System.out.println("LimiteInferior: " + limiteInferior2);
-					investigador.updateVariavelMedida(idMedicao, limiteSuperior2, limiteInferior2);
+					investigador.updateVariavelMedida(idMedicao, (int)limiteSuperior2, (int)limiteInferior2);
 					frame.setVisible(false);
 					gui_investigador.refreshVariaveisMedidas();
 				} catch (Exception e2) {
 					// TODO: handle exception
 					JOptionPane.showMessageDialog(null, "Preencha os campos corretamente");
+					e2.printStackTrace();
 				}
 				
 			}

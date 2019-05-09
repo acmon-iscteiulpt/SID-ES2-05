@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -20,6 +22,7 @@ public class GUI_Cultura_Delete {
 
 	private JFrame frame;
 	private JTextField idCulturaField;
+	private JComboBox<String> idCulturaBox;
 	private Investigador investigador;
 	private GUI_Investigador gui_investigador;
 
@@ -48,9 +51,12 @@ public class GUI_Cultura_Delete {
 		JLabel lblIdcultura = new JLabel("IDCultura");
 		splitPane.setLeftComponent(lblIdcultura);
 		
-		idCulturaField = new JTextField();
-		splitPane.setRightComponent(idCulturaField);
-		idCulturaField.setColumns(10);
+//		idCulturaField = new JTextField();
+//		splitPane.setRightComponent(idCulturaField);
+//		idCulturaField.setColumns(10);
+		
+		this.idCulturaBox = new JComboBox<String>();
+		splitPane.setRightComponent(idCulturaBox);
 		
 		JButton deleteBtn = new JButton("delete");
 		frame.getContentPane().add(deleteBtn);
@@ -58,10 +64,11 @@ public class GUI_Cultura_Delete {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int idCultura = Integer.parseInt(idCulturaField.getText());
-				investigador.deleteCultura(idCultura);
+//				int idCultura = Integer.parseInt(idCulturaField.getText());
+				String idCultura = (String) idCulturaBox.getSelectedItem();
+				int idCultura2 = Integer.parseInt(idCultura);
+				investigador.deleteCultura(idCultura2);
 				frame.setVisible(false);
-				idCulturaField.setText("");
 				gui_investigador.refreshCultura();
 			}
 		});
@@ -70,5 +77,12 @@ public class GUI_Cultura_Delete {
 	public void turnOnVisible() {
 		frame.setVisible(true);
 	}
+	
+	public void resetIdCulturaBox() {
+		idCulturaBox.removeAllItems();
+		DefaultComboBoxModel<String> box = investigador.getIDCultura();
+		idCulturaBox.setModel(box);
+	}
+	
 
 }

@@ -41,6 +41,8 @@ public class Subscriber implements MqttCallback {
 	private static final int discrepanciaTemperatura = 10;
 	private static final int discrepanciaLuminosidade = 10;
 	
+	private Session session;
+	private Properties properties;
 	private Authenticator auth;
 	private Connection conn;
 	private MqttClient client;
@@ -475,15 +477,30 @@ public class Subscriber implements MqttCallback {
 		System.out.println("As notificações foram mandadas");
 	}
 	
+	public void autenticarCliente() {
+		auth = new Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			} 
+		};
+		this.properties = new Properties();
+		properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true"); //TLS
+        this.session = Session.getInstance(properties, auth);
+		
+	}
+	
 	
 	public void enviarEmail(String emailTo, String assunto, String mensagem) {
-		Properties prop = new Properties();
-		prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+//		Properties prop = new Properties();
+//		prop.put("mail.smtp.host", "smtp.gmail.com");
+//        prop.put("mail.smtp.port", "587");
+//        prop.put("mail.smtp.auth", "true");
+//        prop.put("mail.smtp.starttls.enable", "true"); //TLS
         
-        Session session = Session.getInstance(prop, auth);
+//        Session session = Session.getInstance(prop, auth);
 
         try {
 
@@ -536,13 +553,7 @@ public class Subscriber implements MqttCallback {
 		}
 	}
 	
-	public void autenticarCliente() {
-		auth = new Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			} 
-		};
-	}
+
 	
 	
 	public void setLimites() {
