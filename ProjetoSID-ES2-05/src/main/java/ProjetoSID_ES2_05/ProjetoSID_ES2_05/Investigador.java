@@ -29,14 +29,18 @@ public class Investigador {
 	private static final String username = "engenheiroses1@gmail.com";
 	private static final String password = "omiaoegay";
 	private static final String ip = "5.249.51.0:3306";
+	private static final String ipISCTE = "172.17.7.30";
 	private static final String localhost = "localhost";
 	
 	private Connection conn;
 	private Authenticator auth;
+	private Properties prop;
+	private Session session;
 
 	
 	public Investigador(String username, String password) {
 		connectToMainBase(username, password);
+		autenticarCliente();
 		new GUI_Investigador(this);
 		
 	}
@@ -44,7 +48,7 @@ public class Investigador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + localhost + "/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + ipISCTE + "/nossabd_origem", username, password);
 			System.out.println("Investigador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Investigador não se conseguiu conectar a base de dados MySQL!");
@@ -92,7 +96,7 @@ public class Investigador {
 	
 	public DefaultTableModel getCulturaTable(JTable table) {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador2()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
 			((DefaultTableModel)table.getModel()).setRowCount(0);
@@ -192,7 +196,7 @@ public class Investigador {
 	
 	public DefaultComboBoxModel<String> getNomeCultura() {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador2()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
 			String nomeCultura;
@@ -213,7 +217,7 @@ public class Investigador {
 	
 	public DefaultComboBoxModel<String> getIDCultura() {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador()}");
+			CallableStatement cStmt = conn.prepareCall("{call mostra_culturas_utilizador2()}");
 			cStmt.execute();
 			ResultSet rs = cStmt.getResultSet();
 			String nomeCultura;
@@ -283,6 +287,7 @@ public class Investigador {
 			cStmt.setString(4, valorMedicao);
 			cStmt.execute();
 			cStmt.close();
+			verificarMedicao(nomeCultura, nomeVariavel, valorMedicao);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -307,7 +312,9 @@ public class Investigador {
 	}
 	
 	public void verificarMensagem(String mensagem, String nomeCultura, String nomeVariavel, String valorMedicao) {
+		System.out.println("Mensagem medicao ultrapassou: " + mensagem);
 		if(!mensagem.isEmpty()) {
+			
 			notificar(mensagem, nomeCultura, nomeVariavel, valorMedicao);
 		} else {
 			System.out.println("Conteudo mensagem (verificarMensagem - Classe Investigador): " + mensagem);
@@ -323,6 +330,7 @@ public class Investigador {
 	
 	public String getEmail(String nomeCultura) {
 		String email = new String();
+		System.out.println("Vou notificar");
 		try {
 			CallableStatement cStmt = conn.prepareCall("{call getEmail_NomeCultura(?)}");
 			cStmt.setString(1, nomeCultura);
@@ -408,10 +416,33 @@ public class Investigador {
 	
 	public void updateMedicao(String idMedicao, String data, String hora, String valorMedicao) {
 		System.out.println("Update Medicao");
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call update_medicao(?, ?, ?)}");
+			String dataHoraMedicao = data + " " + hora;
+			cStmt.setString(1, idMedicao);
+			cStmt.setString(2, dataHoraMedicao);
+			cStmt.setString(3, valorMedicao);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao executar o SP --> update_cultura");
+		}
 	}
 	
 	public void updateCultura(String nomeCultura, String newNomeCultura, String descricaoCultura) {
 		System.out.println("UpdateCultura");
+		try {
+			CallableStatement cStmt = conn.prepareCall("{call update_cultura(?, ?, ?)}");
+			cStmt.setString(1, nomeCultura);
+			cStmt.setString(2, newNomeCultura);
+			cStmt.setString(3, descricaoCultura);
+			cStmt.execute();
+			cStmt.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Ocorreu um erro ao executar o SP --> update_cultura");
+		}
 	}
 	
 	public void updateVariavelMedida(String idVariavelMedida, int limiteSuperior, int limiteInferior) {
@@ -442,11 +473,12 @@ public class Investigador {
 	
 	public void addVariavelMedida(String nomeCultura, String nomeVariavel, int limiteSuperior, int limiteInferior) {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call insere_variaveismedidas(?, ?, ?, ?)}");
+			CallableStatement cStmt = conn.prepareCall("{call insere_variaveismedidas(?, ?, ?, ?, ?)}");
 			cStmt.setString(1, nomeCultura);
 			cStmt.setString(2, nomeVariavel);
 			cStmt.setLong(3, limiteSuperior);
 			cStmt.setLong(4, limiteInferior);
+			cStmt.setLong(5, 70);
 			cStmt.execute();
 			cStmt.close();
 		} catch (Exception e) {
@@ -460,16 +492,17 @@ public class Investigador {
 				return new PasswordAuthentication(username, password);
 			} 
 		};
-	}
-	
-	public void enviarEmail(String emailTo, String assunto, String mensagem) {
-		Properties prop = new Properties();
+		this.prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
         prop.put("mail.smtp.starttls.enable", "true"); //TLS
         
-        Session session = Session.getInstance(prop, auth);
+        this.session = Session.getInstance(prop, auth);
+	}
+	
+	public void enviarEmail(String emailTo, String assunto, String mensagem) {
+	
 
         try {
 
