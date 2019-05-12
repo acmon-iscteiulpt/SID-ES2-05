@@ -48,7 +48,7 @@ public class Investigador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + ipISCTE + "/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + "79.169.19.131" + "/nossabd_origem", username, password);
 			System.out.println("Investigador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Investigador não se conseguiu conectar a base de dados MySQL!");
@@ -153,13 +153,14 @@ public class Investigador {
 			ResultSet rs = cStmt.getResultSet();
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
-			Object [] row = new Object[5];
+			Object [] row = new Object[6];
 			while(rs.next()) {
 				row[0] = rs.getString("VariaveisMedidas_ID");
 				row[1] = rs.getString("IDCultura_fk");
 				row[2] = rs.getString("IDVariavel_fk");
 				row[3] = rs.getString("LimiteSuperior");
 				row[4] = rs.getString("LimiteInferior");
+				row[5] = rs.getString("PercentagemAlerta");
 				model.addRow(row);
 			}
 			rs.close();
@@ -399,13 +400,14 @@ public class Investigador {
 	
 	public String[] searchVariavelMedida(String idVariavelMedida) {
 		try {
-			String[] v = new String[2];
+			String[] v = new String[3];
 			Statement stmt = conn.createStatement();
 			String querySelect = "SELECT * FROM variaveismedidas WHERE VariaveisMedidas_ID=" + "\"" + idVariavelMedida + "\";";
 			ResultSet rs = stmt.executeQuery(querySelect);
 			rs.next();
 			v[0] = rs.getString("LimiteSuperior");
 			v[1] = rs.getString("LimiteInferior");
+			v[2] = rs.getString("PercentagemAlerta");
 			return v;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -426,7 +428,7 @@ public class Investigador {
 			cStmt.close();
 		} catch (Exception e) {
 			// TODO: handle exception
-			System.out.println("Ocorreu um erro ao executar o SP --> update_cultura");
+			System.out.println("Ocorreu um erro ao executar o SP --> update_medicao");
 		}
 	}
 	
@@ -445,13 +447,14 @@ public class Investigador {
 		}
 	}
 	
-	public void updateVariavelMedida(String idVariavelMedida, int limiteSuperior, int limiteInferior) {
+	public void updateVariavelMedida(String idVariavelMedida, int limiteSuperior, int limiteInferior, int percentagem) {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call alterar_variaveis_medidas(?, ?, ?)}");
+			CallableStatement cStmt = conn.prepareCall("{call alterar_variaveis_medidas(?, ?, ?, ?)}");
 			int idMedicao2 = Integer.parseInt(idVariavelMedida);
 			cStmt.setLong(1, idMedicao2);
 			cStmt.setLong(2, limiteSuperior);
 			cStmt.setLong(3, limiteInferior);
+			cStmt.setLong(4, percentagem);
 			cStmt.execute();
 			cStmt.close();
 		} catch (Exception e) {

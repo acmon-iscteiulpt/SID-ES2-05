@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -110,6 +111,13 @@ public class GUI_Medicoes_Update {
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				String idMedicao = (String) idMedicaoBox.getSelectedItem();
+				Date data = dataChooser.getDate();
+				String dataString = formatData(data);
+				String hora = (String) spinner.getValue().toString();
+				String horaOficial = formatHora(hora);
+				String valorMedicao = valorMedicaoField.getText();
+				investigador.updateMedicao(idMedicao, dataString, horaOficial, valorMedicao);
 				frame.setVisible(false);
 				resetFields();
 				gui_investigador.refreshMedicoes();
@@ -152,5 +160,17 @@ public class GUI_Medicoes_Update {
 			System.out.println("Catch setFields class GUI_Medicoes_Update");
 		}
 	}
-
+	
+	
+	public String formatData(Date data) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String dataString = dateFormat.format(data);
+		return dataString;
+	}
+	
+	
+	public String formatHora(String hora) {
+		String[] v = hora.split(" ");
+		return v[3];
+	}
 }

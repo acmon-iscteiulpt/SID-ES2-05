@@ -1,13 +1,6 @@
 package InterfaceGrafica_Investigador;
 
 import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
@@ -25,13 +18,11 @@ import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Investigador;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Properties;
 
 public class GUI_Investigador {
 	
 
 	
-	private Authenticator auth;
 	private JFrame frame;
 	private JTable culturaTable;
 	private Investigador investigador;
@@ -239,7 +230,7 @@ public class GUI_Investigador {
 			new Object[][] {
 			},
 			new String[] {
-				"VariaveisMedidas_ID", "IDCultura_FK", "IDVariavel_FK", "LimiteSuperior", "LimiteInferior"
+				"VariaveisMedidas_ID", "IDCultura_FK", "IDVariavel_FK", "LimiteSuperior", "LimiteInferior", "Percentagem"
 			}
 		));
 		JScrollPane scrollPane1 = new JScrollPane(variaveisMedidasTable);

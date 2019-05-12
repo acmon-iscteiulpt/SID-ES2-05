@@ -1,7 +1,5 @@
 package InterfaceGrafica_Investigador;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 
 import ProjetoSID_ES2_05.ProjetoSID_ES2_05.Investigador;
@@ -28,6 +26,7 @@ public class GUI_VariaveisMedidas_Update {
 	private JTextField limiteSuperiorField;
 	private JTextField limiteInferiorField;
 	private JComboBox<String> idVariavelMedidaBox;
+	private JTextField percentagemField;
 
 
 	/**
@@ -53,7 +52,7 @@ public class GUI_VariaveisMedidas_Update {
 		
 		JPanel panel = new JPanel();
 		splitPane.setLeftComponent(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		panel.setLayout(new GridLayout(4, 1, 0, 0));
 		
 		JSplitPane splitPane_1 = new JSplitPane();
 		panel.add(splitPane_1);
@@ -91,6 +90,16 @@ public class GUI_VariaveisMedidas_Update {
 		splitPane_3.setRightComponent(limiteInferiorField);
 		limiteInferiorField.setColumns(10);
 		
+		JSplitPane splitPane_4 = new JSplitPane();
+		panel.add(splitPane_4);
+		
+		JLabel lblPercentagemalerta = new JLabel("PercentagemAlerta");
+		splitPane_4.setLeftComponent(lblPercentagemalerta);
+		
+		percentagemField = new JTextField();
+		splitPane_4.setRightComponent(percentagemField);
+		percentagemField.setColumns(10);
+		
 		JButton btnUpdate = new JButton("Update");
 		splitPane.setRightComponent(btnUpdate);
 		btnUpdate.addActionListener(new ActionListener() {
@@ -101,11 +110,11 @@ public class GUI_VariaveisMedidas_Update {
 					String idMedicao = (String) idVariavelMedidaBox.getSelectedItem();
 					String limiteSuperior = limiteSuperiorField.getText();
 					String limiteInferior = limiteInferiorField.getText();
+					String percentagemAlerta = percentagemField.getText();
 					double limiteSuperior2 = Double.parseDouble(limiteSuperior);
 					double limiteInferior2 = Double.parseDouble(limiteInferior);
-					System.out.println("LimiteSuperior: " + limiteSuperior2);
-					System.out.println("LimiteInferior: " + limiteInferior2);
-					investigador.updateVariavelMedida(idMedicao, (int)limiteSuperior2, (int)limiteInferior2);
+					double percentagem = Double.parseDouble(percentagemAlerta);
+					investigador.updateVariavelMedida(idMedicao, (int)limiteSuperior2, (int)limiteInferior2, (int)percentagem);
 					frame.setVisible(false);
 					gui_investigador.refreshVariaveisMedidas();
 				} catch (Exception e2) {
@@ -128,6 +137,7 @@ public class GUI_VariaveisMedidas_Update {
 			String[] v = investigador.searchVariavelMedida(idVariavelMedida);
 			limiteSuperiorField.setText(v[0]);
 			limiteInferiorField.setText(v[1]);
+			percentagemField.setText(v[2]);
 		}
 	}
 	
