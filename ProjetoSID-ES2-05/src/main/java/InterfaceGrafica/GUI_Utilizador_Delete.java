@@ -43,7 +43,7 @@ public class GUI_Utilizador_Delete {
 		JSplitPane splitPane = new JSplitPane();
 		frame.getContentPane().add(splitPane);
 		
-		JLabel lblIdutilizador = new JLabel("IDUtilizador");
+		JLabel lblIdutilizador = new JLabel("NomeUtilizador");
 		splitPane.setLeftComponent(lblIdutilizador);
 		
 		utilizadorBox = new JComboBox<String>();

@@ -1,6 +1,5 @@
 package InterfaceGrafica_Investigador;
 
-import javax.mail.Authenticator;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.FlowLayout;

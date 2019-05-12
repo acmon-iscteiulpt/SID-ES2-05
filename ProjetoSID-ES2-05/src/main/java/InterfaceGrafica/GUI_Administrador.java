@@ -62,7 +62,7 @@ public class GUI_Administrador {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 900, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		
@@ -348,7 +348,7 @@ public class GUI_Administrador {
 				new Object[][] {
 				},
 				new String[] {
-					"IDVariavel", "NomeVariavel"
+					"IDVariavel", "NomeVariavel", "IDCultura_fk"
 				}
 			) {
 				/**
@@ -356,7 +356,7 @@ public class GUI_Administrador {
 				 */
 				private static final long serialVersionUID = 1L;
 				Class[] columnTypes = new Class[] {
-					Integer.class, String.class
+					Integer.class, String.class, Integer.class
 				};
 				public Class getColumnClass(int columnIndex) {
 					return columnTypes[columnIndex];
@@ -454,8 +454,7 @@ public class GUI_Administrador {
 				DefaultTableModel model;
 				String title = tabbedPane.getTitleAt(index);
 				if(title.equals("Cultura")) {
-					model = admin.getCulturaTable(culturaTable);
-					culturaTable.setModel(model);
+					refreshCultura();
 				} else if (title.equals("Medições")) {
 					model = admin.getMedicoesTable(medicoesTable);
 					medicoesTable.setModel(model);
@@ -466,14 +465,12 @@ public class GUI_Administrador {
 					model = admin.getMedicoesTemperaturaTable(medicoesTemperaturaTable);
 					medicoesTemperaturaTable.setModel(model);
 				} else if (title.equals("Utilizador")) {
-					model = admin.getUtilizadorTable(utilizadorTable);
-					utilizadorTable.setModel(model);
+					refreshUtilizador();
 				} else if (title.equals("Sistema")) {
 					model = admin.getSistemaTable(sistemaTable);
 					sistemaTable.setModel(model);
 				} else if (title.equals("Variaveis")) {
-					model = admin.getVariaveisTable(variaveisTable);
-					variaveisTable.setModel(model);
+					refreshVariavel();
 				} else if (title.equals("Variaveis Medidas")) {
 					model = admin.getVariaveisMedidasTable(variaveisMedidasTable);
 					variaveisMedidasTable.setModel(model);
@@ -483,6 +480,7 @@ public class GUI_Administrador {
 			}
 			
 		});
+		refreshCultura();
 		
 
 	}
@@ -495,6 +493,11 @@ public class GUI_Administrador {
 	public void refreshUtilizador() {
 		DefaultTableModel model = admin.getUtilizadorTable(utilizadorTable);
 		utilizadorTable.setModel(model);
+	}
+	
+	public void refreshCultura() {
+		DefaultTableModel model = admin.getCulturaTable(culturaTable);
+		culturaTable.setModel(model);
 	}
 
 }

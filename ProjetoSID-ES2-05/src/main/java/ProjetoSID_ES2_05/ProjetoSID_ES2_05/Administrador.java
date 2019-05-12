@@ -29,7 +29,7 @@ public class Administrador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + "79.169.19.131" + "/nossabd_origem", username, password);
 			System.out.println("Administrador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Administrador não se conseguiu conectar a base de dados MySQL!");
@@ -236,10 +236,11 @@ public class Administrador {
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
-			Object [] row = new Object[2];
+			Object [] row = new Object[3];
 			while(rs.next()) {
 				row[0] = rs.getString("IDVariavel");
 				row[1] = rs.getString("NomeVariavel");
+				row[2] = rs.getString("IDCultura_fk");
 				model.addRow(row);
 			}
 			return model;
@@ -276,14 +277,6 @@ public class Administrador {
 		
 	}
 	
-	public void getAlertasSensorTable() {
-		
-	}
-	
-	public void getAlertasMedicoesTable() {
-		
-	}
-	
 	public void addSistema(int sistema_id, int limiteSuperiorTemperatura, int limiteInferiorTemperatura, int limiteSuperiorLuminosidade, int limiteInferiorLuminosidade) {
 		try {
 			String queryAddSistema = "INSERT INTO sistema(Sistema_ID, LimiteSuperiorTemperatura, LimiteInferiorTemperatura, LimiteInferiorLuminosidade, LimiteSuperiorLuminosidade) VALUES (" +
@@ -317,13 +310,11 @@ public class Administrador {
 		}
 	}
 	
-	public void addVariavel(String nomeCultura, String nomeVariavel, int limiteSuperior, int limiteInferior) {
+	public void addVariavel(String nomeCultura, String nomeVariavel) {
 		try {
-			CallableStatement cStmt = conn.prepareCall("{call insere_variaveis(?, ?, ?, ?)}");
+			CallableStatement cStmt = conn.prepareCall("{call insere_variaveis(?, ?)}");
 			cStmt.setString(1, nomeCultura);
 			cStmt.setString(2, nomeVariavel);
-			cStmt.setLong(3, limiteSuperior);
-			cStmt.setLong(4, limiteInferior);
 			cStmt.execute();
 			cStmt.close();
 		} catch (SQLException e) {

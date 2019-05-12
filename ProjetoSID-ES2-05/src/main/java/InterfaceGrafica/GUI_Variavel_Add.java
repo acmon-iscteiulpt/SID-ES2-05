@@ -24,8 +24,6 @@ public class GUI_Variavel_Add {
 	private JFrame frame;
 	private Administrador admin;
 	private JTextField nomeVariavelField;
-	private JTextField limiteSuperiorField;
-	private JTextField limiteInferiorField;
 	private JComboBox<String> culturaBox;
 	private GUI_Administrador gui_admin;
 
@@ -74,26 +72,6 @@ public class GUI_Variavel_Add {
 		splitPane_2.setRightComponent(nomeVariavelField);
 		nomeVariavelField.setColumns(10);
 		
-		JSplitPane splitPane_3 = new JSplitPane();
-		panel.add(splitPane_3);
-		
-		JLabel lblLimitesuperior = new JLabel("LimiteSuperior");
-		splitPane_3.setLeftComponent(lblLimitesuperior);
-		
-		limiteSuperiorField = new JTextField();
-		splitPane_3.setRightComponent(limiteSuperiorField);
-		limiteSuperiorField.setColumns(10);
-		
-		JSplitPane splitPane_4 = new JSplitPane();
-		panel.add(splitPane_4);
-		
-		JLabel lblLimiteinferior = new JLabel("LimiteInferior");
-		splitPane_4.setLeftComponent(lblLimiteinferior);
-		
-		limiteInferiorField = new JTextField();
-		splitPane_4.setRightComponent(limiteInferiorField);
-		limiteInferiorField.setColumns(10);
-		
 		JButton addVariavelBtn = new JButton("Add");
 		splitPane.setRightComponent(addVariavelBtn);
 		addVariavelBtn.addActionListener(new ActionListener() {
@@ -103,10 +81,8 @@ public class GUI_Variavel_Add {
 				try {
 					String cultura = (String) culturaBox.getSelectedItem();
 					String nomeVariavel = nomeVariavelField.getText();
-					int limiteSuperior = Integer.parseInt(limiteSuperiorField.getText());
-					int limiteInferior = Integer.parseInt(limiteInferiorField.getText());
 					System.out.println("Cultura seleccionada: " + cultura);
-					admin.addVariavel(cultura, nomeVariavel, limiteSuperior, limiteInferior);
+					admin.addVariavel(cultura, nomeVariavel);
 					frame.setVisible(false);
 					resetFields();
 					gui_admin.refreshVariavel();
@@ -121,8 +97,6 @@ public class GUI_Variavel_Add {
 	
 	public void resetFields() {
 		nomeVariavelField.setText("");
-		limiteSuperiorField.setText("");
-		limiteInferiorField.setText("");
 	}
 	
 	public void turnOnVisible() {
