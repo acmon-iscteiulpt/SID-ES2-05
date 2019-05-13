@@ -79,11 +79,11 @@ public class GUI_Investigador {
 			new Object[][] {
 			},
 			new String[] {
-				"IDCultura", "NomeCultura", "DescricaoCultura", "IDUtilizador_fk"
+				"IDCultura", "NomeCultura", "DescricaoCultura",
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
+				false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -94,8 +94,6 @@ public class GUI_Investigador {
 		culturaTable.getColumnModel().getColumn(1).setResizable(false);
 		culturaTable.getColumnModel().getColumn(2).setResizable(false);
 		culturaTable.getColumnModel().getColumn(2).setPreferredWidth(91);
-		culturaTable.getColumnModel().getColumn(3).setResizable(false);
-		culturaTable.getColumnModel().getColumn(3).setPreferredWidth(87);
 		culturaPanel.add(culturaTable);
 		
 		JScrollPane scrollPaneCultura = new JScrollPane(culturaTable);

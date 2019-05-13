@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 public class Login {
 	
 	private static String nomeBaseDados = "nossabd_origem";
+	private static String ip = "5.249.51.0";
 	
 	private static Login login = new Login();
 	
@@ -35,7 +36,7 @@ public class Login {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = null;
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/"+nomeBaseDados, username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://"+ ip +"/"+ nomeBaseDados, username, password);
 			System.out.println("MySql Database is connected !");
 			typeOfUser(username, password);
 			connected = true;
@@ -61,7 +62,7 @@ public class Login {
 	//Está-se a usar as credenciais do root para poder aceder a tabela de utilizadores
 	public void typeOfUser(String username, String password) throws SQLException {
 		Connection conn = null;
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/"+nomeBaseDados, username, password);
+		conn = DriverManager.getConnection("jdbc:mysql://"+ ip +"/"+ nomeBaseDados, username, password);
 		Statement stmt = conn.createStatement();
 		String querySelectTypeOfUser = "SELECT TipoUtilizador FROM utilizador WHERE NomeUtilizador=\"" + username + "\";";
 		System.out.println("Query: " + querySelectTypeOfUser);

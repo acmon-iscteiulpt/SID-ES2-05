@@ -28,9 +28,8 @@ public class Investigador {
 	
 	private static final String username = "engenheiroses1@gmail.com";
 	private static final String password = "omiaoegay";
-	private static final String ip = "5.249.51.0:3306";
-	private static final String ipISCTE = "172.17.7.30";
-	private static final String localhost = "localhost";
+	private static final String ip = "5.249.51.0";
+
 	
 	private Connection conn;
 	private Authenticator auth;
@@ -48,7 +47,7 @@ public class Investigador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + "79.169.19.131" + "/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + ip + "/nossabd_origem", username, password);
 			System.out.println("Investigador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Investigador não se conseguiu conectar a base de dados MySQL!");
@@ -78,10 +77,7 @@ public class Investigador {
 		}
 	}
 	
-	//Criar SP que faz delete da cultura 
-	//Perguntar se o nome da cultura vai ser única ou não
-	
-	//Se não for única, temos que eliminar a tabela cultura pelo ID 
+
 	public void deleteCultura(int idCultura) {
 		try {
 			Statement stmt = conn.createStatement();
@@ -101,12 +97,11 @@ public class Investigador {
 			ResultSet rs = cStmt.getResultSet();
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
-			Object [] row = new Object[4];
+			Object [] row = new Object[3];
 			while(rs.next()) {
 				row[0] = rs.getString("IDCultura");
 				row[1] = rs.getString("NomeCultura");
 				row[2] = rs.getString("DescricaoCultura");
-				row[3] = rs.getString("IDUtilizador_fk");
 				model.addRow(row);
 			}
 			rs.close();
@@ -277,7 +272,6 @@ public class Investigador {
 		return null;
 	}
 	
-	//SP ainda nao funciona
 	public void addMedicaoTable(String nomeCultura,String nomeVariavel ,String data, String time, String valorMedicao) {
 		try {
 			CallableStatement cStmt = conn.prepareCall("{call insere_medicoes(?, ?, ?, ?)}");

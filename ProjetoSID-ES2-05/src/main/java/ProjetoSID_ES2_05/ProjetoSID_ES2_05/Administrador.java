@@ -29,7 +29,7 @@ public class Administrador {
 	private void connectToMainBase(String username, String password) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://" + "79.169.19.131" + "/nossabd_origem", username, password);
+			conn = DriverManager.getConnection("jdbc:mysql://" + "5.249.51.0" + "/nossabd_origem", username, password);
 			System.out.println("Administrador conectou-se a base de dados MySQL");
 		} catch (Exception e) {
 			System.out.println("Administrador não se conseguiu conectar a base de dados MySQL!");
@@ -52,7 +52,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM cultura";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -76,7 +75,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM medicoes";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -102,7 +100,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM medicoesluminosidade";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -126,7 +123,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM medicoestemperatura";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -149,7 +145,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM sistema";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -175,7 +170,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM utilizador";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -199,7 +193,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM utilizador";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			String idUtilizador;
 			DefaultComboBoxModel<String> box = new DefaultComboBoxModel<String>();
@@ -232,7 +225,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM variavel";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -255,7 +247,6 @@ public class Administrador {
 		try {
 			Statement stmt = conn.createStatement();
 			String querySelectCultura = "SELECT * FROM variaveismedidas";
-			System.out.println("Query: " + querySelectCultura);
 			ResultSet rs = stmt.executeQuery(querySelectCultura);
 			((DefaultTableModel)table.getModel()).setRowCount(0);
 			DefaultTableModel model = (DefaultTableModel)table.getModel();
@@ -281,7 +272,6 @@ public class Administrador {
 		try {
 			String queryAddSistema = "INSERT INTO sistema(Sistema_ID, LimiteSuperiorTemperatura, LimiteInferiorTemperatura, LimiteInferiorLuminosidade, LimiteSuperiorLuminosidade) VALUES (" +
 					sistema_id + ", " + limiteSuperiorTemperatura + ", " + limiteInferiorTemperatura + ", " + limiteSuperiorLuminosidade + ", " + limiteInferiorLuminosidade + ");";
-			System.out.println("Query: " + queryAddSistema);
 			Statement stmt = conn.createStatement();
 			stmt.executeUpdate(queryAddSistema);
 		} catch (SQLException e) {
@@ -293,8 +283,6 @@ public class Administrador {
 	
 	
 	public void addUtilizador(String nomeUtilizador, String tipoUtilizador, String email, String password) {
-		String callSpString = "CALL CriarUtilizador(" + "\"" + nomeUtilizador + "\", \"" + tipoUtilizador + "\", \"" + email + "\", \"" + password + "\");";
-		System.out.println("Query: " + callSpString);
 		try {
 			CallableStatement cStmt = conn.prepareCall("{call CriarUtilizador(?, ?, ?, ?)}");
 			cStmt.setString(1, nomeUtilizador);
