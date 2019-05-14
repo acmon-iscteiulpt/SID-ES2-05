@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 
 public class MongoRead  {
+	
+	private static final String ip = "5.249.51.0:3306";
 
 	private Connection conn;
 	private MongoClient mongoClient;
@@ -40,7 +42,7 @@ public class MongoRead  {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			this.conn = null;
-			conn = DriverManager.getConnection("jdbc:mysql://5.249.51.0:3306/nossabd_origem", "root", "teste123");
+			conn = DriverManager.getConnection("jdbc:mysql://" + ip +"/nossabd_origem", "root", "teste123");
 			System.out.println("MySql Database is connected !");
 		} catch (Exception e) {
 			System.out.println("Connection failed!");

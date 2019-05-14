@@ -32,12 +32,13 @@ import org.json.JSONObject;
 
 public class Subscriber implements MqttCallback {
 
+	private static final String ip = "5.249.51.0:3306";
 	private static final String username = "engenheiroses1@gmail.com";
 	private static final String password = "omiaoegay";
 	private static final String bd = "bd_dados_sensores";
 	private static final String collection = "collection_dados_sensores";
-	private static final String broker = "tcp://broker.mqtt-dashboard.com:1883";
-	private static final String topic = "/sid_lab_2019_2";
+	private static final String broker = "tcp://iot.eclipse.org:1883";
+	private static final String topic = "/sid_lab_2019";
 	private static final int discrepanciaTemperatura = 10;
 	private static final int discrepanciaLuminosidade = 10;
 	
@@ -88,7 +89,7 @@ public class Subscriber implements MqttCallback {
 	
 	public void initialize() {
 		try {
-			client = new MqttClient(broker, "sid_es_05");
+			client = new MqttClient(broker, "afonsomiao");
 			client.setCallback(this);
 			connOpts = new MqttConnectOptions();
 			connOpts.setAutomaticReconnect(true);
@@ -141,7 +142,7 @@ public class Subscriber implements MqttCallback {
 		System.out.println("JSON CORRETO: " + json);
 		// tornar a mensagem recebida num json object para em baixo verificar quais
 		// campos exeitem nesse json
-		trataJSON(json);
+//		trataJSON(json);
 
 		
 		
@@ -527,7 +528,7 @@ public class Subscriber implements MqttCallback {
 			System.out.println("Entrei no connectToMainBase");
 			Class.forName("com.mysql.jdbc.Driver");
 			this.conn = null;
-			conn = DriverManager.getConnection("jdbc:mysql://5.249.51.0:3306/nossabd_origem", "root", "teste123");
+			conn = DriverManager.getConnection("jdbc:mysql://"+ ip +"/nossabd_origem", "root", "teste123");
 			System.out.println("MySql Database is connected !");
 		} catch (Exception e) {
 			System.out.println("Connection failed!");
