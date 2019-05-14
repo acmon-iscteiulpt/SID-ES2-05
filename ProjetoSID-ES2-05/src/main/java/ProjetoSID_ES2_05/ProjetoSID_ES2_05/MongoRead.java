@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 public class MongoRead  {
 	
-	private static final String ip = "5.249.51.0:3306";
+	private static final String ip = "localhost";
 
 	private Connection conn;
 	private MongoClient mongoClient;

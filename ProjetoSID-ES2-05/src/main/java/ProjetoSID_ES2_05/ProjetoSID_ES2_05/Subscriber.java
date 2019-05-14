@@ -32,7 +32,7 @@ import org.json.JSONObject;
 
 public class Subscriber implements MqttCallback {
 
-	private static final String ip = "5.249.51.0:3306";
+	private static final String ip = "localhost";
 	private static final String username = "engenheiroses1@gmail.com";
 	private static final String password = "omiaoegay";
 	private static final String bd = "bd_dados_sensores";
@@ -142,7 +142,7 @@ public class Subscriber implements MqttCallback {
 		System.out.println("JSON CORRETO: " + json);
 		// tornar a mensagem recebida num json object para em baixo verificar quais
 		// campos exeitem nesse json
-//		trataJSON(json);
+		trataJSON(json);
 
 		
 		
@@ -150,7 +150,7 @@ public class Subscriber implements MqttCallback {
 	
 	public void trataJSON(String json) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("Vou tratar JSON");
-		if(json.contains("{") && json.contains("}")) {
+		if(json.contains("{") && json.contains("}") && (json.contains("cell") || json.contains("tmp"))) {
 			JSONObject jsonObj = new JSONObject(json);
 			
 			ObjectMapper mapper = new ObjectMapper();
