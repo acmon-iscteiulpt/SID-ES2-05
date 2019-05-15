@@ -385,10 +385,10 @@ public class Subscriber implements MqttCallback {
 						showArrayToleranciaLuminosidade();
 						addValoresLuminosidadeMongo();
 						//enviar os dados do array de tolerancia para o mongo --> método e depois faz clear
-
+						sendValoresLuminosidadeToMongo();
 					} else {
 						System.out.println("Numero de tolerancias da luminosidade passou a zero");
-						System.out.println("Valor luminosidade anormal constate --> foi adicionado o valor no array tolerancia luminosidade");
+						System.out.println("Valor luminosidade anormal constante --> foi adicionado o valor no array tolerancia luminosidade");
 						toleranciaLuminosidade = 3;
 						arrayToleranciaLuminosidade.add(new ValorSensor(valorLuminosidade, data, hora));
 						showArrayToleranciaLuminosidade();
